@@ -231,3 +231,80 @@ Recipe: (chef-apply cookbook)::(chef-apply recipe)
   * service[apache2] action start (up to date)
 /home/vagrant/jun3 >
 
+
+---------------------------------------------------------------------------------------------------------------------
+
+/home/vagrant/jun3 >irb
+irb(main):001:0> a = 1
+=> 1
+irb(main):002:0> puts a
+1
+=> nil
+irb(main):003:0> c = "Hello"
+=> "Hello"
+irb(main):004:0> d = 'Hello'
+=> "Hello"
+irb(main):005:0> place = 'Bangalore'
+=> "Bangalore"
+irb(main):006:0> s = 'I stay in #{place}'
+=> "I stay in \#{place}"
+irb(main):007:0> puts s
+I stay in #{place}
+=> nil
+irb(main):008:0> s = "I stay in #{place}"
+=> "I stay in Bangalore"
+irb(main):009:0> puts s
+I stay in Bangalore
+=> nil
+irb(main):010:0> states = ['KA','TL','UP]
+irb(main):011:1' ;
+irb(main):012:1' '
+irb(main):013:1> ]
+=> ["KA", "TL", "UP]\n;\n"]
+irb(main):014:0> states = ['KA','TL','UP']
+=> ["KA", "TL", "UP"]
+irb(main):015:0> states.each do |state]
+SyntaxError: compile error
+(irb):15: syntax error, unexpected ']', expecting '|'
+        from (irb):15
+        from :0
+irb(main):016:0> states.each do |state|
+irb(main):017:1* puts state
+irb(main):018:1> end
+KA
+TL
+UP
+=> ["KA", "TL", "UP"]
+irb(main):019:0> exit
+/home/vagrant/jun3 >vi helloworld.rb
+/home/vagrant/jun3 >cat helloworld.rb
+file '/tmp/helloworld.txt' do
+  content 'username=scott'
+  action :create
+end
+
+envs = ['dev','prod','ua']
+
+envs.each do |env|
+  file "/tmp/#{env}.cnf" do
+    action :create
+  end
+end
+/home/vagrant/jun3 >chef-apply helloworld.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create
+    - create new file /tmp/dev.cnf
+  * file[/tmp/prod.cnf] action create
+    - create new file /tmp/prod.cnf
+  * file[/tmp/ua.cnf] action create
+    - create new file /tmp/ua.cnf
+/home/vagrant/jun3 >ls /tmp/dev.cnf /tmp/prod.cnf /tmp/ua.cnf
+/tmp/dev.cnf  /tmp/prod.cnf  /tmp/ua.cnf
+/home/vagrant/jun3 >sudo service tomcat status
+tomcat: unrecognized service
+/home/vagrant/jun3 >sudo service tomcat7 status
+ * Tomcat servlet engine is running with pid 1280
+/home/vagrant/jun3 >sudo service apache2 status
+Apache2 is running (pid 5952).
+/home/vagrant/jun3 >
