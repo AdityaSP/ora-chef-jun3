@@ -308,3 +308,164 @@ tomcat: unrecognized service
 /home/vagrant/jun3 >sudo service apache2 status
 Apache2 is running (pid 5952).
 /home/vagrant/jun3 >
+
+
+
+----------------------------------------------------------------------------------------------------------------
+/home/vagrant/jun3 >chef-client --local-mode helloworld.rb
+[2019-06-03T09:24:46+00:00] WARN: No config file found or specified on command line, using command line options.
+[2019-06-03T09:24:46+00:00] WARN: No cookbooks directory found at or above current directory.  Assuming /home/vagrant/jun3.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: []
+
+================================================================================
+Error Syncing Cookbooks:
+================================================================================
+
+Unexpected Error:
+-----------------
+Errno::EACCES: Permission denied @ unlink_internal - /home/vagrant/.chef/local-mode-cache/cache/cookbooks/apache2/files/ports.conf
+
+Platform:
+---------
+x86_64-linux
+
+
+Running handlers:
+[2019-06-03T09:24:49+00:00] ERROR: Running exception handlers
+Running handlers complete
+[2019-06-03T09:24:49+00:00] ERROR: Exception handlers complete
+Chef Client failed. 0 resources updated in 01 seconds
+[2019-06-03T09:24:49+00:00] FATAL: Stacktrace dumped to /home/vagrant/.chef/local-mode-cache/cache/chef-stacktrace.out
+[2019-06-03T09:24:49+00:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
+[2019-06-03T09:24:49+00:00] ERROR: Permission denied @ unlink_internal - /home/vagrant/.chef/local-mode-cache/cache/cookbooks/apache2/files/ports.conf
+[2019-06-03T09:24:49+00:00] FATAL: Chef::Exceptions::ChildConvergeError: Chef run process exited unsuccessfully (exit code 1)
+/home/vagrant/jun3 >
+/home/vagrant/jun3 >sudo chef-client --local-mode helloworld.rb
+[2019-06-03T09:25:06+00:00] WARN: No config file found or specified on command line, using command line options.
+[2019-06-03T09:25:06+00:00] WARN: No cookbooks directory found at or above current directory.  Assuming /home/vagrant/jun3.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: []
+Synchronizing Cookbooks:
+Installing Cookbook Gems:
+Compiling Cookbooks...
+[2019-06-03T09:25:08+00:00] WARN: Node precise64 has an empty run list.
+Converging 4 resources
+Recipe: @recipe_files::/home/vagrant/jun3/helloworld.rb
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 0/4 resources updated in 01 seconds
+/home/vagrant/jun3 >ls
+apache.rb  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >cd nodes/
+/home/vagrant/jun3/nodes >ls
+precise64.json
+/home/vagrant/jun3/nodes >hostname
+precise64
+/home/vagrant/jun3/nodes >ls -ltra `which ohai`
+lrwxrwxrwx 1 root root 20 Dec  6  2016 /usr/bin/ohai -> /opt/chefdk/bin/ohai
+/home/vagrant/jun3/nodes >ohai > /tmp/output
+/home/vagrant/jun3/nodes >vi /tmp/output
+/home/vagrant/jun3/nodes >ls
+precise64.json
+/home/vagrant/jun3/nodes >cd ..
+/home/vagrant/jun3 >ls
+apache.rb  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >
+/home/vagrant/jun3 >mkdir cookbooks
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >cd cookbooks/
+/home/vagrant/jun3/cookbooks >ls
+/home/vagrant/jun3/cookbooks >chef generate cookbook mycookbook
+Generating cookbook mycookbook
+- Ensuring correct cookbook file content
+- Committing cookbook files to git
+- Ensuring delivery configuration
+- Ensuring correct delivery build cookbook content
+- Adding delivery configuration to feature branch
+- Adding build cookbook to feature branch
+- Merging delivery content feature branch to master
+
+Your cookbook is ready. Type `cd mycookbook` to enter it.
+
+There are several commands you can run to get started locally developing and testing your cookbook.
+Type `delivery local --help` to see a full list.
+
+Why not start by writing a test? Tests for the default recipe are stored at:
+
+test/recipes/default_test.rb
+
+If you'd prefer to dive right in, the default recipe can be found at:
+
+recipes/default.rb
+
+/home/vagrant/jun3/cookbooks >
+/home/vagrant/jun3/cookbooks >ls
+mycookbook
+/home/vagrant/jun3/cookbooks >cd mycookbook/
+/home/vagrant/jun3/cookbooks/mycookbook >tree .
+.
+|-- Berksfile
+|-- chefignore
+|-- metadata.rb
+|-- README.md
+|-- recipes
+|   `-- default.rb
+|-- spec
+|   |-- spec_helper.rb
+|   `-- unit
+|       `-- recipes
+|           `-- default_spec.rb
+`-- test
+    `-- recipes
+        `-- default_test.rb
+
+6 directories, 8 files
+/home/vagrant/jun3/cookbooks/mycookbook >cd ..
+/home/vagrant/jun3/cookbooks >cd ..
+/home/vagrant/jun3 >ls -ltr helloworld.rb
+-rw-rw-r-- 1 vagrant vagrant 183 Jun  3 09:04 helloworld.rb
+/home/vagrant/jun3 >ls -ltrs cookbooks/mycookbook/recipes/default.rb
+4 -rw-rw-r-- 1 vagrant vagrant 107 Jun  3 09:37 cookbooks/mycookbook/recipes/default.rb
+/home/vagrant/jun3 >cp helloworld.rb cookbooks/mycookbook/recipes/default.rb
+/home/vagrant/jun3 >cat cookbooks/mycookbook/recipes/default.rb
+file '/tmp/helloworld.txt' do
+  content 'username=scott'
+  action :create
+end
+
+envs = ['dev','prod','ua']
+
+envs.each do |env|
+  file "/tmp/#{env}.cnf" do
+    action :create
+  end
+end
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >#sudo chef-client --local-mode helloworld.rb
+/home/vagrant/jun3 >sudo chef-client --local-mode --runlist 'recipe[mycookbook]'
+[2019-06-03T09:45:05+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 4 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 0/4 resources updated in 01 seconds
+/home/vagrant/jun3 >
