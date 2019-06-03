@@ -469,3 +469,468 @@ Running handlers:
 Running handlers complete
 Chef Client finished, 0/4 resources updated in 01 seconds
 /home/vagrant/jun3 >
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+/home/vagrant/jun3 >#sudo chef-client --local-mode helloworld.rb
+/home/vagrant/jun3 >sudo chef-client --local-mode --runlist 'recipe[mycookbook]'
+[2019-06-03T09:45:05+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 4 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 0/4 resources updated in 01 seconds
+/home/vagrant/jun3 >
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >cd cookbooks/
+/home/vagrant/jun3/cookbooks >ls
+mycookbook
+/home/vagrant/jun3/cookbooks >cd mycookbook/
+/home/vagrant/jun3/cookbooks/mycookbook >cd ../..
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >#sudo chef-client --local-mode --runlist 'recipe[mycookbook]'
+/home/vagrant/jun3 >cd cookbooks/mycookbook/recipes/
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >sudo chef-client --local-mode --runlist 'recipe[mycookbook]'
+[2019-06-03T10:36:44+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 4 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 0/4 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >ls
+default.rb
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >cp ../../../stop.rb .
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >ls
+default.rb  stop.rb
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >sudo chef-client --local-mode --runlist 'recipe[mycookbook]'
+[2019-06-03T10:38:09+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 4 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 0/4 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >sudo chef-client --local-mode --runlist 'recipe[mycookbook::default]'
+[2019-06-03T10:39:20+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook::default"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 4 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 0/4 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >sudo chef-client --local-mode --runlist 'recipe[mycookbook::stop]'
+[2019-06-03T10:39:32+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook::stop"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 4 resources
+Recipe: mycookbook::stop
+  * log[Stopping service tomcat7] action write
+
+  * service[tomcat7] action stop (up to date)
+  * log[Stopping service apache2] action write
+
+  * service[apache2] action stop (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 2/4 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >ls
+default.rb  stop.rb
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >vi default.rb
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >sudo chef-client --local-mode --runlist 'recipe[mycookbook::stop]'
+[2019-06-03T10:40:14+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook::stop"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 4 resources
+Recipe: mycookbook::stop
+  * log[Stopping service tomcat7] action write
+
+  * service[tomcat7] action stop (up to date)
+  * log[Stopping service apache2] action write
+
+  * service[apache2] action stop (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 2/4 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >sudo chef-client --local-mode --runlist 'recipe[mycookbook::default]'
+[2019-06-03T10:40:25+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook::default"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+[2019-06-03T10:40:27+00:00] WARN: MissingCookbookDependency:
+Recipe `stop` is not in the run_list, and cookbook 'stop'
+is not a dependency of any cookbook in the run_list.  To load this recipe,
+first add a dependency on cookbook 'stop' in the cookbook you're
+including it from in that cookbook's metadata.
+
+
+================================================================================
+Recipe Compile Error in /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb
+================================================================================
+
+Chef::Exceptions::CookbookNotFound
+----------------------------------
+Cookbook stop not found. If you're loading stop from another cookbook, make sure you configure the dependency in your metadata
+
+Cookbook Trace:
+---------------
+  /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:14:in `from_file'
+
+Relevant File Content:
+----------------------
+/home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:
+
+  7:
+  8:  envs.each do |env|
+  9:    file "/tmp/#{env}.cnf" do
+ 10:      action :create
+ 11:    end
+ 12:  end
+ 13:
+ 14>> include_recipe 'stop'
+ 15:
+
+Platform:
+---------
+x86_64-linux
+
+
+Running handlers:
+[2019-06-03T10:40:27+00:00] ERROR: Running exception handlers
+Running handlers complete
+[2019-06-03T10:40:27+00:00] ERROR: Exception handlers complete
+Chef Client failed. 0 resources updated in 01 seconds
+[2019-06-03T10:40:27+00:00] FATAL: Stacktrace dumped to /home/vagrant/.chef/local-mode-cache/cache/chef-stacktrace.out
+[2019-06-03T10:40:27+00:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
+[2019-06-03T10:40:27+00:00] ERROR: Cookbook stop not found. If you're loading stop from another cookbook, make sure you configure the dependency in your metadata
+[2019-06-03T10:40:27+00:00] FATAL: Chef::Exceptions::ChildConvergeError: Chef run process exited unsuccessfully (exit code 1)
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >vi default.rb
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >sudo chef-client --local-mode --runlist 'recipe[mycookbook::default]'
+[2019-06-03T10:40:59+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook::default"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 8 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+Recipe: mycookbook::stop
+  * log[Stopping service tomcat7] action write
+
+  * service[tomcat7] action stop (up to date)
+  * log[Stopping service apache2] action write
+
+  * service[apache2] action stop (up to date)
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 2/8 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >cat default.rb
+file '/tmp/helloworld.txt' do
+  content 'username=scott'
+  action :create
+end
+
+envs = ['dev','prod','ua']
+
+envs.each do |env|
+  file "/tmp/#{env}.cnf" do
+    action :create
+  end
+end
+
+include_recipe 'mycookbook::stop'
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >vi /tmp/output
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >vi /tmp/output
+/home/vagrant/jun3/cookbooks/mycookbook/recipes >cd ../../..
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >vi helloworld.rb
+/home/vagrant/jun3 >i#chef-client
+i#chef-client: command not found
+/home/vagrant/jun3 >cd
+/home/vagrant >ls -ltra
+total 256
+-rw-r--r--  1 vagrant vagrant   220 Sep 14  2012 .bash_logout
+-rw-------  1 vagrant vagrant    12 Sep 14  2012 .veewee_version
+-rw-------  1 vagrant vagrant     6 Sep 14  2012 .vbox_version
+-rwxr-xr-x  1 vagrant vagrant  6487 Sep 14  2012 postinstall.sh
+-rw-r--r--  1 vagrant vagrant     0 Sep 14  2012 .sudo_as_admin_successful
+drwxr-xr-x  2 vagrant vagrant  4096 Dec  6  2016 .fontconfig
+drwxr-xr-x  3 vagrant vagrant  4096 Dec  6  2016 .groovy
+drwxr-xr-x  3 vagrant vagrant  4096 Dec  6  2016 .m2
+drwxrwxr-x  2 vagrant vagrant  4096 Dec 20  2016 .pip
+drwx------  3 vagrant vagrant  4096 Dec 20  2016 .cache
+-rw-r--r--  1 vagrant vagrant  3598 Dec 20  2016 .bashrc
+drwxrwxr-x  2 vagrant vagrant  4096 Dec 22  2016 pyctype
+-rw-rw-r--  1 vagrant vagrant    22 Jan  7  2017 .gitconfig
+drwxrwxr-x  6 vagrant vagrant  4096 Feb  1  2017 code
+drwxrwxr-x  3 vagrant vagrant  4096 Feb  1  2017 gitdemo
+drwxr-xr-x  6 vagrant vagrant  4096 Feb  1  2017 MyAppDemo
+drwxrwxr-x  3 vagrant vagrant  4096 Mar 23  2017 trials
+drwxrwxr-x  6 vagrant vagrant  4096 Mar 25  2017 .chef-addon
+drwxrwxr-x  5 vagrant vagrant  4096 Mar 26  2017 anotherchefdemo
+drwxrwxr-x  5 vagrant vagrant  4096 Mar 26  2017 .chef
+drwxrwxr-x  4 vagrant vagrant  4096 Mar 31  2017 myrecipe
+drwxrwxrwx  3 vagrant vagrant  4096 Mar 31  2017 berkstrial
+drwxrwxr-x  9 vagrant vagrant  4096 Apr  2  2017 myplatform
+drwxrwxr-x  4 vagrant vagrant  4096 Apr  2  2017 rspectrial
+drwxrwxr-x  3 vagrant vagrant  4096 Apr  7  2017 .inspec
+drwxrwxr-x  7 vagrant vagrant  4096 Apr  7  2017 berksdemo
+drwxr-xr-x  3 root    root     4096 Apr  7  2017 .chefdk
+-rw-rw-r--  1 vagrant vagrant   128 Sep  3  2017 hello.rb
+drwxrwxr-x  9 vagrant vagrant  4096 Oct 24  2017 chefdemo
+drwxrwxr-x  2 vagrant vagrant  4096 Apr  3  2018 todel
+-rw-rw-r--  1 vagrant vagrant   139 Apr  4  2018 notifytrial.rb
+drwxrwxr-x  7 vagrant vagrant  4096 Apr  4  2018 apr2
+drwxrwxr-x  2 vagrant vagrant  4096 Apr 24  2018 ctype_demo
+drwxrwxr-x  2 vagrant vagrant  4096 Apr 24  2018 ctypes
+drwxrwxrwx  5 vagrant vagrant  4096 Sep 10  2018 chefmysore
+drwxrwxr-x  3 vagrant vagrant  4096 Sep 11  2018 anotherserver
+drwxr-xr-x  5 root    root     4096 Sep 11  2018 ..
+drwxr-xr-x  9 vagrant vagrant  4096 Sep 12  2018 sept10chef
+drwxr-xr-x  3 vagrant vagrant  4096 Sep 12  2018 .berkshelf
+drwx------  2 vagrant vagrant  4096 Sep 12  2018 .ssh
+drwxrwxr-x  9 vagrant vagrant  4096 Oct 31  2018 sept10
+-rw-------  1 vagrant vagrant   118 Oct 31  2018 .mysql_history
+drwxrwxr-x  8 vagrant vagrant  4096 Nov  1  2018 oct29
+drwxrwxr-x  4 vagrant vagrant  4096 Nov  1  2018 secondorg
+drwxrwxr-x  3 vagrant vagrant  4096 Nov  2  2018 old_nov2
+drwxrwxr-x  3 vagrant vagrant  4096 Nov 12  2018 newporj
+drwxrwxr-x  8 vagrant vagrant  4096 Nov 14  2018 old_nov12
+-rw-r--r--  1 vagrant vagrant   773 Nov 22  2018 .profile
+drwxrwxr-x  8 vagrant vagrant  4096 Nov 22  2018 nov21
+-rw-------  1 vagrant vagrant  1024 Nov 22  2018 .rnd
+drwxrwxrwx  2 vagrant vagrant  4096 Nov 23  2018 inspectrial
+-rw-------  1 vagrant vagrant 41066 Nov 23  2018 .bash_history
+drwxr-xr-x 41 vagrant vagrant  4096 Jun  3 06:34 .
+drwxrwxr-x  4 vagrant vagrant  4096 Jun  3 10:56 jun3
+/home/vagrant >cd .c
+.cache/      .chef/       .chef-addon/ .chefdk/
+/home/vagrant >cd .chef
+/home/vagrant/.chef >ls
+backup  cache  local-mode-cache
+/home/vagrant/.chef >cd local-mode-cache/
+/home/vagrant/.chef/local-mode-cache >ls
+backup  cache
+/home/vagrant/.chef/local-mode-cache >ls -ltra
+total 16
+drwxrwxr-x 3 vagrant vagrant 4096 Mar 25  2017 cache
+drwxrwxr-x 4 vagrant vagrant 4096 Mar 26  2017 .
+drwxrwxr-x 5 vagrant vagrant 4096 Mar 26  2017 ..
+drwxrwxr-x 4 vagrant vagrant 4096 Sep 10  2018 backup
+/home/vagrant/.chef/local-mode-cache >cd cache/
+/home/vagrant/.chef/local-mode-cache/cache >ls
+chef-client-running.pid  chef-stacktrace.out  cookbooks
+/home/vagrant/.chef/local-mode-cache/cache >ls -ltra
+total 24
+drwxrwxr-x 3 vagrant vagrant 4096 Mar 25  2017 .
+drwxrwxr-x 4 vagrant vagrant 4096 Mar 26  2017 ..
+drwxrwxr-x 8 vagrant vagrant 4096 Sep 10  2018 cookbooks
+-rw-r----- 1 vagrant vagrant 4151 Jun  3 10:40 chef-stacktrace.out
+-rw-rw-r-- 1 vagrant vagrant    4 Jun  3 10:40 chef-client-running.pid
+/home/vagrant/.chef/local-mode-cache/cache >cd ../..//
+/home/vagrant/.chef >cd ..
+/home/vagrant >
+/home/vagrant >cd jun3/
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >sudo chef-client --local-mode helloworld.rb
+[2019-06-03T10:57:58+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook::default"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 14 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+Recipe: mycookbook::stop
+  * log[Stopping service tomcat7] action write
+
+  * service[tomcat7] action stop (up to date)
+  * log[Stopping service apache2] action write
+
+  * service[apache2] action stop (up to date)
+Recipe: @recipe_files::/home/vagrant/jun3/helloworld.rb
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+  * log[Ipaddress is node['ipaddress']] action write
+
+  * log[Linux kernel name is node['kernel']['name']] action write
+
+
+Running handlers:
+Running handlers complete
+
+Deprecated features used!
+  Cloning resource attributes for file[/tmp/helloworld.txt] from prior resource (CHEF-3694)
+Previous file[/tmp/helloworld.txt]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:1:in `from_file'
+Current  file[/tmp/helloworld.txt]: /home/vagrant/jun3/helloworld.rb:1:in `from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:1:in `from_file'
+  Cloning resource attributes for file[/tmp/dev.cnf] from prior resource (CHEF-3694)
+Previous file[/tmp/dev.cnf]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:9:in `block in from_file'
+Current  file[/tmp/dev.cnf]: /home/vagrant/jun3/helloworld.rb:9:in `block in from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:9:in `block in from_file'
+  Cloning resource attributes for file[/tmp/prod.cnf] from prior resource (CHEF-3694)
+Previous file[/tmp/prod.cnf]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:9:in `block in from_file'
+Current  file[/tmp/prod.cnf]: /home/vagrant/jun3/helloworld.rb:9:in `block in from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:9:in `block in from_file'
+  Cloning resource attributes for file[/tmp/ua.cnf] from prior resource (CHEF-3694)
+Previous file[/tmp/ua.cnf]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:9:in `block in from_file'
+Current  file[/tmp/ua.cnf]: /home/vagrant/jun3/helloworld.rb:9:in `block in from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:9:in `block in from_file'
+
+Chef Client finished, 4/14 resources updated in 01 seconds
+/home/vagrant/jun3 >vi helloworld.rb
+/home/vagrant/jun3 >sudo chef-client --local-mode helloworld.rb
+[2019-06-03T10:59:24+00:00] WARN: No config file found or specified on command line, using command line options.
+Starting Chef Client, version 12.16.42
+resolving cookbooks for run list: ["mycookbook::default"]
+Synchronizing Cookbooks:
+  - mycookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 14 resources
+Recipe: mycookbook::default
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+Recipe: mycookbook::stop
+  * log[Stopping service tomcat7] action write
+
+  * service[tomcat7] action stop (up to date)
+  * log[Stopping service apache2] action write
+
+  * service[apache2] action stop (up to date)
+Recipe: @recipe_files::/home/vagrant/jun3/helloworld.rb
+  * file[/tmp/helloworld.txt] action create (up to date)
+  * file[/tmp/dev.cnf] action create (up to date)
+  * file[/tmp/prod.cnf] action create (up to date)
+  * file[/tmp/ua.cnf] action create (up to date)
+  * log[Ipaddress is 10.0.2.15] action write
+
+  * log[Linux kernel name is Linux] action write
+
+
+Running handlers:
+Running handlers complete
+
+Deprecated features used!
+  Cloning resource attributes for file[/tmp/helloworld.txt] from prior resource (CHEF-3694)
+Previous file[/tmp/helloworld.txt]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:1:in `from_file'
+Current  file[/tmp/helloworld.txt]: /home/vagrant/jun3/helloworld.rb:1:in `from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:1:in `from_file'
+  Cloning resource attributes for file[/tmp/dev.cnf] from prior resource (CHEF-3694)
+Previous file[/tmp/dev.cnf]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:9:in `block in from_file'
+Current  file[/tmp/dev.cnf]: /home/vagrant/jun3/helloworld.rb:9:in `block in from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:9:in `block in from_file'
+  Cloning resource attributes for file[/tmp/prod.cnf] from prior resource (CHEF-3694)
+Previous file[/tmp/prod.cnf]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:9:in `block in from_file'
+Current  file[/tmp/prod.cnf]: /home/vagrant/jun3/helloworld.rb:9:in `block in from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:9:in `block in from_file'
+  Cloning resource attributes for file[/tmp/ua.cnf] from prior resource (CHEF-3694)
+Previous file[/tmp/ua.cnf]: /home/vagrant/.chef/local-mode-cache/cache/cookbooks/mycookbook/recipes/default.rb:9:in `block in from_file'
+Current  file[/tmp/ua.cnf]: /home/vagrant/jun3/helloworld.rb:9:in `block in from_file' at 1 location:
+    - /home/vagrant/jun3/helloworld.rb:9:in `block in from_file'
+
+Chef Client finished, 4/14 resources updated in 01 seconds
+/home/vagrant/jun3 >ifconfig
+eth0      Link encap:Ethernet  HWaddr 08:00:27:88:0c:a6
+          inet addr:10.0.2.15  Bcast:10.0.2.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fe88:ca6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:20288 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:13797 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:5552304 (5.5 MB)  TX bytes:2534739 (2.5 MB)
+
+eth1      Link encap:Ethernet  HWaddr 08:00:27:e5:c3:6e
+          inet addr:10.1.1.32  Bcast:10.1.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fee5:c36e/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:9574 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6826 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:883598 (883.5 KB)  TX bytes:1057318 (1.0 MB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:19 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:19 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1156 (1.1 KB)  TX bytes:1156 (1.1 KB)
+
+/home/vagrant/jun3 >
