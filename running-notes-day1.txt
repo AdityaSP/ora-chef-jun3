@@ -1,0 +1,215 @@
+login as: vagrant
+vagrant@10.1.1.32's password:
+Welcome to Ubuntu 12.04 LTS (GNU/Linux 3.2.0-23-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+New release '14.04.5 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+Welcome to your Vagrant-built virtual machine.
+Last login: Mon Jun  3 03:44:15 2019 from 10.1.1.1
+Couldn't get a file descriptor referring to the console
+
+vagrant@33m~
+$
+
+vagrant@33m~
+$ ls
+anotherchefdemo  chefmysore  inspectrial     nov21           rspectrial
+anotherserver    code        MyAppDemo       oct29           secondorg
+apr2             ctype_demo  myplatform      old_nov12       sept10
+berksdemo        ctypes      myrecipe        old_nov2        sept10chef
+berkstrial       gitdemo     newporj         postinstall.sh  todel
+chefdemo         hello.rb    notifytrial.rb  pyctype         trials
+
+vagrant@33m~
+$
+
+vagrant@33m~
+$ ls
+anotherchefdemo  chefmysore  inspectrial     nov21           rspectrial
+anotherserver    code        MyAppDemo       oct29           secondorg
+apr2             ctype_demo  myplatform      old_nov12       sept10
+berksdemo        ctypes      myrecipe        old_nov2        sept10chef
+berkstrial       gitdemo     newporj         postinstall.sh  todel
+chefdemo         hello.rb    notifytrial.rb  pyctype         trials
+
+vagrant@33m~
+$
+
+vagrant@33m~
+$ pwd
+/home/vagrant
+
+vagrant@33m~
+$ echo $PS1
+\[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@33m\]\w\[\033[36m\]\[\033[0m\]\n$
+
+vagrant@33m~
+$ export PS1='$PWD >'
+/home/vagrant >
+/home/vagrant >export PS1='$PWD >'
+/home/vagrant >
+/home/vagrant >
+/home/vagrant >ls
+anotherchefdemo  chefmysore  inspectrial     nov21           rspectrial
+anotherserver    code        MyAppDemo       oct29           secondorg
+apr2             ctype_demo  myplatform      old_nov12       sept10
+berksdemo        ctypes      myrecipe        old_nov2        sept10chef
+berkstrial       gitdemo     newporj         postinstall.sh  todel
+chefdemo         hello.rb    notifytrial.rb  pyctype         trials
+/home/vagrant >
+/home/vagrant >mkdir jun3
+/home/vagrant >cd jun3
+/home/vagrant/jun3 >ls
+/home/vagrant/jun3 >chef --version
+Chef Development Kit Version: 1.0.3
+chef-client version: 12.16.42
+delivery version: master (83358fb62c0f711c70ad5a81030a6cae4017f103)
+berks version: 5.2.0
+kitchen version: 1.13.2
+/home/vagrant/jun3 >cd /opt/chefdk/
+/opt/chefdk >ls
+bin       Gemfile       gitbin   LICENSES               version-manifest.txt
+embedded  Gemfile.lock  LICENSE  version-manifest.json
+/opt/chefdk >cd bin
+/opt/chefdk/bin >ls
+berks        chef-solo   inspec                       push-apply
+chef         chef-vault  kitchen                      pushy-client
+chef-apply   cookstyle   knife                        pushy-service-manager
+chef-client  delivery    ohai                         rubocop
+chef-shell   foodcritic  print_execution_environment
+/opt/chefdk/bin >cd ..
+/opt/chefdk >ls
+bin       Gemfile       gitbin   LICENSES               version-manifest.txt
+embedded  Gemfile.lock  LICENSE  version-manifest.json
+/opt/chefdk >cd embedded/
+/opt/chefdk/embedded >ls
+bin  etc  include  lib  libexec  share  ssl
+/opt/chefdk/embedded >cd bin
+/opt/chefdk/embedded/bin >ls
+aclocal         fog                          pushy-client
+aclocal-1.11    foodcritic                   pushy-service-manager
+appbundler      gem                          rackup
+autoconf        guard                        rake
+autoheader      _guard-core                  rbvmomish
+autom4te        htmldiff                     rdoc
+automake        httpclient                   reset
+automake-1.11   ifnames                      ri
+autoreconf      infocmp                      rspec
+autoscan        infotocap                    rubocop
+autoupdate      inspec                       ruby
+aws-rb          irb                          ruby-parse
+aws.rb          kitchen                      ruby-prof
+berks           knife                        ruby-prof-check-trace
+bundle          launchy                      ruby-rewrite
+bundler         ldiff                        rwinrm
+byebug          libtool                      rwinrmcp
+captoinfo       libtoolize                   safe_yaml
+chef            listen                       serverspec-init
+chef-apply      m4                           tabs
+chef-client     makedepend                   thor
+chef-shell      minitar                      tic
+chef-solo       mixlib-install               toe
+chef-vault      ncurses5-config              tput
+chef-zero       ncursesw5-config             tset
+clear           nokogiri                     tt
+coderay         ohai                         update_rubygems
+cookstyle       openssl                      uuid
+c_rehash        pcre-config                  xml2-config
+cucumber        pcregrep                     xmlcatalog
+curl            pcretest                     xmllint
+curl-config     pirb                         xmlwf
+curve_keygen    pkg-config                   xslt-config
+erb             print_execution_environment  xsltproc
+erubis          pruby                        yard
+fauxhai         pry                          yardoc
+ffi-yajl-bench  pry-remote                   yri
+fission         push-apply
+/opt/chefdk/embedded/bin >cd ruby
+-bash: cd: ruby: Not a directory
+/opt/chefdk/embedded/bin >./ruby --version
+ruby 2.3.1p112 (2016-04-26 revision 54768) [x86_64-linux]
+/opt/chefdk/embedded/bin >cd ../..
+/opt/chefdk >ls
+bin       Gemfile       gitbin   LICENSES               version-manifest.txt
+embedded  Gemfile.lock  LICENSE  version-manifest.json
+/opt/chefdk >cd
+/home/vagrant >cd jun3/
+/home/vagrant/jun3 >ls
+/home/vagrant/jun3 >
+/home/vagrant/jun3 >vi helloworld.rb
+/home/vagrant/jun3 >cat helloworld.rb
+file '/tmp/helloworld.txt' do
+  content 'Hello World'
+  action :create
+end
+/home/vagrant/jun3 >which chef-apply
+/usr/bin/chef-apply
+/home/vagrant/jun3 >ls -ltra /usr/bin/chef-apply
+lrwxrwxrwx 1 root root 26 Dec  6  2016 /usr/bin/chef-apply -> /opt/chefdk/bin/chef-apply
+/home/vagrant/jun3 >chef-apply helloworld.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * file[/tmp/helloworld.txt] action create
+    - create new file /tmp/helloworld.txt
+    - update content in file /tmp/helloworld.txt from none to a591a6
+    --- /tmp/helloworld.txt     2019-06-03 06:49:20.525478882 +0000
+    +++ /tmp/.chef-helloworld20190603-4089-lktfz2.txt   2019-06-03 06:49:20.525478882 +0000
+    @@ -1 +1,2 @@
+    +Hello World
+/home/vagrant/jun3 >cat /tmp/helloworld.txt
+Hello World/home/vagrant/jun3 >vi helloworld.rb
+/home/vagrant/jun3 >cat helloworld.rb
+file '/tmp/helloworld.txt' do
+  content 'username=hello'
+  action :create
+end
+/home/vagrant/jun3 >chef-apply helloworld.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * file[/tmp/helloworld.txt] action create
+    - update content in file /tmp/helloworld.txt from a591a6 to 5c2545
+    --- /tmp/helloworld.txt     2019-06-03 06:49:20.525478882 +0000
+    +++ /tmp/.chef-helloworld20190603-4327-1pzt0sf.txt  2019-06-03 06:51:16.871106460 +0000
+    @@ -1,2 +1,2 @@
+    -Hello World
+    +username=hello
+/home/vagrant/jun3 >cat /tmp/helloworld.txt
+/home/vagrant/jun3 >^C                lloworld.txt
+/home/vagrant/jun3 >cat /tmp/helloworld.txt
+/home/vagrant/jun3 >chef-apply helloworld.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * file[/tmp/helloworld.txt] action create (up to date)
+/home/vagrant/jun3 >vi /tmp/helloworld.txt
+/home/vagrant/jun3 >cat /tmp/helloworld.txt
+username=scott
+/home/vagrant/jun3 >cat helloworld.rb
+file '/tmp/helloworld.txt' do
+  content 'username=hello'
+  action :create
+end
+/home/vagrant/jun3 >chef-apply helloworld.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * file[/tmp/helloworld.txt] action create
+    - update content in file /tmp/helloworld.txt from 600451 to 5c2545
+    --- /tmp/helloworld.txt     2019-06-03 06:55:44.551993713 +0000
+    +++ /tmp/.chef-helloworld20190603-4778-16jku5i.txt  2019-06-03 06:59:04.951258147 +0000
+    @@ -1,2 +1,2 @@
+    -username=scott
+    +username=hello
+/home/vagrant/jun3 >vi helloworld.rb
+/home/vagrant/jun3 >chef-apply helloworld.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * file[/tmp/helloworld.txt] action create
+    - update content in file /tmp/helloworld.txt from 5c2545 to 9fe9fc
+    --- /tmp/helloworld.txt     2019-06-03 06:59:04.951258147 +0000
+    +++ /tmp/.chef-helloworld20190603-4998-cuxdr4.txt   2019-06-03 06:59:56.966981122 +0000
+    @@ -1,2 +1,2 @@
+    -username=hello
+    +username=scott
+/home/vagrant/jun3 >chef-apply helloworld.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * file[/tmp/helloworld.txt] action create (up to date)
+/home/vagrant/jun3 >
+
+
+----------------------------------------------------------------------------------------------------
