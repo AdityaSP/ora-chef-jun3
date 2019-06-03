@@ -213,3 +213,21 @@ Recipe: (chef-apply cookbook)::(chef-apply recipe)
 
 
 ----------------------------------------------------------------------------------------------------
+
+/home/vagrant/jun3 >vi apache.rb
+/home/vagrant/jun3 >id
+uid=1000(vagrant) gid=1000(vagrant) groups=1000(vagrant),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),109(lpadmin),110(sambashare),999(admin)
+/home/vagrant/jun3 >cat apache.rb
+package 'apache2' do
+  action :install
+end
+
+service 'apache2' do
+  action :start
+end
+/home/vagrant/jun3 >sudo chef-apply apache.rb
+Recipe: (chef-apply cookbook)::(chef-apply recipe)
+  * apt_package[apache2] action install (up to date)
+  * service[apache2] action start (up to date)
+/home/vagrant/jun3 >
+
