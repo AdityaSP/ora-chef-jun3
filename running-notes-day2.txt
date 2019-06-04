@@ -224,3 +224,141 @@ Connecting to 10.1.1.34
 /home/vagrant/jun3 >knife node list
 node1-ubuntu
 /home/vagrant/jun3 >
+
+
+-------------------------------------------------------------------------------------------------
+/home/vagrant/jun3 >knife node run_list --help
+FATAL: Cannot find subcommand for: 'node run_list --help'
+Available node subcommands: (for details, knife SUB-COMMAND --help)
+
+** NODE COMMANDS **
+knife node bulk delete REGEX (options)
+knife node create NODE (options)
+knife node delete NODE (options)
+knife node edit NODE (options)
+knife node environment set NODE ENVIRONMENT
+knife node from file FILE (options)
+knife node list (options)
+knife node run_list add [NODE] [ENTRY[,ENTRY]] (options)
+knife node run_list remove [NODE] [ENTRY[,ENTRY]] (options)
+knife node run_list set NODE ENTRIES (options)
+knife node show NODE (options)
+knife node status [<node> <node> ...]
+
+/home/vagrant/jun3 >knife node run_list set node1-ubuntu 'recipe[mycookbook]'
+node1-ubuntu:
+  run_list: recipe[mycookbook]
+/home/vagrant/jun3 >knife node show node1-ubuntu
+Node Name:   node1-ubuntu
+Environment: _default
+FQDN:        node1-ubuntu
+IP:          10.0.2.15
+Run List:    recipe[mycookbook]
+Roles:
+Recipes:
+Platform:    ubuntu 14.04
+Tags:
+/home/vagrant/jun3 >knife ssh 10.1.1.34 'sudo chef-client' --manual-list --ssh-user vagrant
+10.1.1.34 bash: warning: setlocale: LC_ALL: cannot change locale (en_US)
+10.1.1.34 [2019-06-04T06:32:07+00:00] INFO: Forking chef instance to converge...
+10.1.1.34 Starting Chef Client, version 12.21.4
+10.1.1.34 [2019-06-04T06:32:07+00:00] INFO: *** Chef 12.21.4 ***
+10.1.1.34 [2019-06-04T06:32:07+00:00] INFO: Platform: x86_64-linux
+10.1.1.34 [2019-06-04T06:32:07+00:00] INFO: Chef-client pid: 2216
+10.1.1.34 [2019-06-04T06:32:07+00:00] INFO: The plugin path /etc/chef/ohai/plugins does not exist. Skipping...
+10.1.1.34 [2019-06-04T06:32:10+00:00] INFO: Run List is [recipe[mycookbook]]
+10.1.1.34 [2019-06-04T06:32:10+00:00] INFO: Run List expands to [mycookbook]
+10.1.1.34 [2019-06-04T06:32:10+00:00] INFO: Starting Chef Run for node1-ubuntu
+10.1.1.34 [2019-06-04T06:32:10+00:00] INFO: Running start handlers
+10.1.1.34 [2019-06-04T06:32:10+00:00] INFO: Start handlers complete.
+10.1.1.34 [2019-06-04T06:32:10+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 [2019-06-04T06:32:11+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 [2019-06-04T06:32:11+00:00] INFO: Error while reporting run start to Data Collector. URL: https://chef-server.test/organizations/devopsdemo/data-collector Exception: 404 -- 404 "Not Found"  (This is normal if you do not have Chef Automate)
+10.1.1.34 resolving cookbooks for run list: ["mycookbook"]
+10.1.1.34 [2019-06-04T06:32:11+00:00] INFO: Loading cookbooks [mycookbook@0.1.0]
+10.1.1.34 Synchronizing Cookbooks:
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/Berksfile in the cache.
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/.gitignore in the cache.
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/README.md in the cache.
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/chefignore in the cache.
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/.kitchen.yml in the cache.
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/metadata.rb in the cache.
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/recipes/default.rb in the cache.
+10.1.1.34 [2019-06-04T06:32:12+00:00] INFO: Storing updated cookbooks/mycookbook/recipes/stop.rb in the cache.
+10.1.1.34   - mycookbook (0.1.0)
+10.1.1.34 Installing Cookbook Gems:
+10.1.1.34 Compiling Cookbooks...
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 Converging 8 resources
+10.1.1.34 Recipe: mycookbook::default
+10.1.1.34   * file[/tmp/helloworld.txt] action create[2019-06-04T06:32:13+00:00] INFO: Processing file[/tmp/helloworld.txt] action create (mycookbook::default line 1)
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: file[/tmp/helloworld.txt] created file /tmp/helloworld.txt
+10.1.1.34
+10.1.1.34     - create new file /tmp/helloworld.txt[2019-06-04T06:32:13+00:00] INFO: file[/tmp/helloworld.txt] updated file contents /tmp/helloworld.txt
+10.1.1.34
+10.1.1.34     - update content in file /tmp/helloworld.txt from none to 9fe9fc
+10.1.1.34     --- /tmp/helloworld.txt   2019-06-04 06:32:13.031283207 +0000
+10.1.1.34     +++ /tmp/.chef-helloworld20190604-2216-1pzyr26.txt        2019-06-04 06:32:13.027283207 +0000
+10.1.1.34     @@ -1 +1,2 @@
+10.1.1.34     +username=scott
+10.1.1.34   * file[/tmp/dev.cnf] action create[2019-06-04T06:32:13+00:00] INFO: Processing file[/tmp/dev.cnf] action create (mycookbook::default line 9)
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: file[/tmp/dev.cnf] created file /tmp/dev.cnf
+10.1.1.34
+10.1.1.34     - create new file /tmp/dev.cnf
+10.1.1.34   * file[/tmp/prod.cnf] action create[2019-06-04T06:32:13+00:00] INFO: Processing file[/tmp/prod.cnf] action create (mycookbook::default line 9)
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: file[/tmp/prod.cnf] created file /tmp/prod.cnf
+10.1.1.34
+10.1.1.34     - create new file /tmp/prod.cnf
+10.1.1.34   * file[/tmp/ua.cnf] action create[2019-06-04T06:32:13+00:00] INFO: Processing file[/tmp/ua.cnf] action create (mycookbook::default line 9)
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: file[/tmp/ua.cnf] created file /tmp/ua.cnf
+10.1.1.34
+10.1.1.34     - create new file /tmp/ua.cnf
+10.1.1.34 Recipe: mycookbook::stop
+10.1.1.34   * log[Stopping service tomcat7] action write[2019-06-04T06:32:13+00:00] INFO: Processing log[Stopping service tomcat7] action write (mycookbook::stop line 4)
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: Stopping service tomcat7
+10.1.1.34
+10.1.1.34
+10.1.1.34   * service[tomcat7] action stop[2019-06-04T06:32:13+00:00] INFO: Processing service[tomcat7] action stop (mycookbook::stop line 6)
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: service[tomcat7] stopped
+10.1.1.34
+10.1.1.34     - stop service service[tomcat7]
+10.1.1.34   * log[Stopping service apache2] action write[2019-06-04T06:32:13+00:00] INFO: Processing log[Stopping service apache2] action write (mycookbook::stop line 4)
+10.1.1.34 [2019-06-04T06:32:13+00:00] INFO: Stopping service apache2
+10.1.1.34
+10.1.1.34
+10.1.1.34   * service[apache2] action stop[2019-06-04T06:32:13+00:00] INFO: Processing service[apache2] action stop (mycookbook::stop line 6)
+10.1.1.34 [2019-06-04T06:32:15+00:00] INFO: service[apache2] stopped
+10.1.1.34
+10.1.1.34     - stop service service[apache2]
+10.1.1.34 [2019-06-04T06:32:15+00:00] INFO: Chef Run complete in 4.314559405 seconds
+10.1.1.34
+10.1.1.34 Running handlers:
+10.1.1.34 [2019-06-04T06:32:15+00:00] INFO: Running report handlers
+10.1.1.34 Running handlers complete
+10.1.1.34 [2019-06-04T06:32:15+00:00] INFO: Report handlers complete
+10.1.1.34 Chef Client finished, 8/8 resources updated in 07 seconds
+/home/vagrant/jun3 >ls /tmp/helloworld.txt
+ls: cannot access /tmp/helloworld.txt: No such file or directory
+/home/vagrant/jun3 >knife node show node1-ubuntu
+Node Name:   node1-ubuntu
+Environment: _default
+FQDN:        node1-ubuntu
+IP:          10.0.2.15
+Run List:    recipe[mycookbook]
+Roles:
+Recipes:     mycookbook, mycookbook::default, mycookbook::stop
+Platform:    ubuntu 14.04
+Tags:
+/home/vagrant/jun3 >cat /etc/hosts
+127.0.0.1       localhost
+127.0.1.1       precise64
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+10.1.1.33 chef-server.test
+10.1.1.34 node1-ubuntu
+/home/vagrant/jun3 >
