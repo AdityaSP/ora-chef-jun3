@@ -717,3 +717,332 @@ node.default['apache']['port']=8888
 log "The value is #{node['apache']['port']}"
 log "The kernel name is #{node['kernel']['name']}"
 /home/vagrant/jun3 >
+
+
+
+--------------------------------------------------------------------------------
+
+/home/vagrant/jun3/cookbooks >chef generate cookbook apache2
+Generating cookbook apache2
+- Ensuring correct cookbook file content
+- Committing cookbook files to git
+- Ensuring delivery configuration
+- Ensuring correct delivery build cookbook content
+- Adding delivery configuration to feature branch
+- Adding build cookbook to feature branch
+- Merging delivery content feature branch to master
+
+Your cookbook is ready. Type `cd apache2` to enter it.
+
+There are several commands you can run to get started locally developing and testing your cookbook.
+Type `delivery local --help` to see a full list.
+
+Why not start by writing a test? Tests for the default recipe are stored at:
+
+test/recipes/default_test.rb
+
+If you'd prefer to dive right in, the default recipe can be found at:
+
+recipes/default.rb
+
+/home/vagrant/jun3/cookbooks >ls
+apache2  mycookbook-0.2.0  myvars
+/home/vagrant/jun3/cookbooks >vi apache2/recipes/default.rb
+/home/vagrant/jun3/cookbooks >
+/home/vagrant/jun3/cookbooks >cat apache2/recipes/default.rb
+package 'apache2' do
+  action :install
+end
+
+service 'apache2' do
+  action :started
+end
+/home/vagrant/jun3/cookbooks >chef-client --local-mode --runlist 'recipe[apache2]'
+[2019-06-04T09:21:41+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T09:21:41+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T09:21:41+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T09:21:41+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T09:21:41+00:00] INFO: Chef-client pid: 5652
+[2019-06-04T09:21:43+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x00000003189928 @version=nil, @type=:recipe, @name="apache2">] from CLI options
+[2019-06-04T09:21:43+00:00] INFO: Run List is [recipe[apache2]]
+[2019-06-04T09:21:43+00:00] INFO: Run List expands to [apache2]
+[2019-06-04T09:21:43+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T09:21:43+00:00] INFO: Running start handlers
+[2019-06-04T09:21:43+00:00] INFO: Start handlers complete.
+[2019-06-04T09:21:43+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["apache2"]
+[2019-06-04T09:21:43+00:00] INFO: Loading cookbooks [apache2@0.1.0]
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/recipes/default.rb from the cache; its cookbook is no longer needed on this client.
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/README.md from the cache; its cookbook is no longer needed on this client.
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/attributes/default.rb from the cache; its cookbook is no longer needed on this client.
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/chefignore from the cache; its cookbook is no longer needed on this client.
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/metadata.rb from the cache; its cookbook is no longer needed on this client.
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/Berksfile from the cache; its cookbook is no longer needed on this client.
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/.gitignore from the cache; its cookbook is no longer needed on this client.
+[2019-06-04T09:21:43+00:00] INFO: Removing cookbooks/myvars/.kitchen.yml from the cache; its cookbook is no longer needed on this client.
+Synchronizing Cookbooks:
+[2019-06-04T09:21:43+00:00] INFO: Storing updated cookbooks/apache2/recipes/default.rb in the cache.
+[2019-06-04T09:21:43+00:00] INFO: Storing updated cookbooks/apache2/metadata.rb in the cache.
+[2019-06-04T09:21:43+00:00] INFO: Storing updated cookbooks/apache2/chefignore in the cache.
+[2019-06-04T09:21:43+00:00] INFO: Storing updated cookbooks/apache2/README.md in the cache.
+[2019-06-04T09:21:43+00:00] INFO: Storing updated cookbooks/apache2/.gitignore in the cache.
+[2019-06-04T09:21:43+00:00] INFO: Storing updated cookbooks/apache2/.kitchen.yml in the cache.
+[2019-06-04T09:21:43+00:00] INFO: Storing updated cookbooks/apache2/Berksfile in the cache.
+  - apache2 (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+
+================================================================================
+Recipe Compile Error in /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb
+================================================================================
+
+Chef::Exceptions::ValidationFailed
+----------------------------------
+Option action must be equal to one of: nothing, enable, disable, start, stop, restart, reload, mask, unmask!  You passed :started.
+
+Cookbook Trace:
+---------------
+  /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb:6:in `block in from_file'
+  /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb:5:in `from_file'
+
+Relevant File Content:
+----------------------
+/home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb:
+
+  1:  package 'apache2' do
+  2:    action :install
+  3:  end
+  4:
+  5:  service 'apache2' do
+  6>>   action :started
+  7:  end
+  8:
+
+Platform:
+---------
+x86_64-linux
+
+
+Running handlers:
+[2019-06-04T09:21:43+00:00] ERROR: Running exception handlers
+Running handlers complete
+[2019-06-04T09:21:43+00:00] ERROR: Exception handlers complete
+Chef Client failed. 0 resources updated in 02 seconds
+[2019-06-04T09:21:43+00:00] FATAL: Stacktrace dumped to /home/vagrant/jun3/.chef/local-mode-cache/cache/chef-stacktrace.out
+[2019-06-04T09:21:43+00:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
+[2019-06-04T09:21:43+00:00] ERROR: Option action must be equal to one of: nothing, enable, disable, start, stop, restart, reload, mask, unmask!  You passed :started.
+[2019-06-04T09:21:44+00:00] FATAL: Chef::Exceptions::ChildConvergeError: Chef run process exited unsuccessfully (exit code 1)
+/home/vagrant/jun3/cookbooks >sudo chef-client --local-mode --runlist 'recipe[apache2]'
+[2019-06-04T09:21:55+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T09:21:55+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T09:21:55+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T09:21:55+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T09:21:55+00:00] INFO: Chef-client pid: 5875
+[2019-06-04T09:21:57+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x00000004d81770 @version=nil, @type=:recipe, @name="apache2">] from CLI options
+[2019-06-04T09:21:57+00:00] INFO: Run List is [recipe[apache2]]
+[2019-06-04T09:21:57+00:00] INFO: Run List expands to [apache2]
+[2019-06-04T09:21:57+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T09:21:57+00:00] INFO: Running start handlers
+[2019-06-04T09:21:57+00:00] INFO: Start handlers complete.
+[2019-06-04T09:21:57+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["apache2"]
+[2019-06-04T09:21:57+00:00] INFO: Loading cookbooks [apache2@0.1.0]
+Synchronizing Cookbooks:
+  - apache2 (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+
+================================================================================
+Recipe Compile Error in /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb
+================================================================================
+
+Chef::Exceptions::ValidationFailed
+----------------------------------
+Option action must be equal to one of: nothing, enable, disable, start, stop, restart, reload, mask, unmask!  You passed :started.
+
+Cookbook Trace:
+---------------
+  /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb:6:in `block in from_file'
+  /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb:5:in `from_file'
+
+Relevant File Content:
+----------------------
+/home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/apache2/recipes/default.rb:
+
+  1:  package 'apache2' do
+  2:    action :install
+  3:  end
+  4:
+  5:  service 'apache2' do
+  6>>   action :started
+  7:  end
+  8:
+
+Platform:
+---------
+x86_64-linux
+
+
+Running handlers:
+[2019-06-04T09:21:57+00:00] ERROR: Running exception handlers
+Running handlers complete
+[2019-06-04T09:21:57+00:00] ERROR: Exception handlers complete
+Chef Client failed. 0 resources updated in 01 seconds
+[2019-06-04T09:21:57+00:00] FATAL: Stacktrace dumped to /home/vagrant/jun3/.chef/local-mode-cache/cache/chef-stacktrace.out
+[2019-06-04T09:21:57+00:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
+[2019-06-04T09:21:57+00:00] ERROR: Option action must be equal to one of: nothing, enable, disable, start, stop, restart, reload, mask, unmask!  You passed :started.
+[2019-06-04T09:21:57+00:00] FATAL: Chef::Exceptions::ChildConvergeError: Chef run process exited unsuccessfully (exit code 1)
+/home/vagrant/jun3/cookbooks >vi apache2/recipes/default.rb                     /home/vagrant/jun3/cookbooks >sudo chef-client --local-mode --runlist 'recipe[apache2]'
+[2019-06-04T09:22:29+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T09:22:29+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T09:22:29+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T09:22:29+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T09:22:29+00:00] INFO: Chef-client pid: 6101
+[2019-06-04T09:22:31+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x000000036d1de0 @version=nil, @type=:recipe, @name="apache2">] from CLI options
+[2019-06-04T09:22:31+00:00] INFO: Run List is [recipe[apache2]]
+[2019-06-04T09:22:31+00:00] INFO: Run List expands to [apache2]
+[2019-06-04T09:22:31+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T09:22:31+00:00] INFO: Running start handlers
+[2019-06-04T09:22:31+00:00] INFO: Start handlers complete.
+[2019-06-04T09:22:31+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["apache2"]
+[2019-06-04T09:22:31+00:00] INFO: Loading cookbooks [apache2@0.1.0]
+Synchronizing Cookbooks:
+[2019-06-04T09:22:31+00:00] INFO: Storing updated cookbooks/apache2/recipes/default.rb in the cache.
+  - apache2 (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: apache2::default
+  * apt_package[apache2] action install[2019-06-04T09:22:31+00:00] INFO: Processing apt_package[apache2] action install (apache2::default line 1)
+ (up to date)
+  * service[apache2] action start[2019-06-04T09:22:31+00:00] INFO: Processing service[apache2] action start (apache2::default line 5)
+ (up to date)
+[2019-06-04T09:22:31+00:00] INFO: Chef Run complete in 0.560786132 seconds
+
+Running handlers:
+[2019-06-04T09:22:31+00:00] INFO: Running report handlers
+Running handlers complete
+[2019-06-04T09:22:31+00:00] INFO: Report handlers complete
+Chef Client finished, 0/2 resources updated in 02 seconds
+/home/vagrant/jun3/cookbooks >cd apache2/
+/home/vagrant/jun3/cookbooks/apache2 >chef generate template ports.conf.erb
+Recipe: code_generator::template
+  * directory[/home/vagrant/jun3/cookbooks/apache2/templates/default] action create
+    - create new directory /home/vagrant/jun3/cookbooks/apache2/templates/default
+  * template[/home/vagrant/jun3/cookbooks/apache2/templates/ports.conf.erb] action create
+    - create new file /home/vagrant/jun3/cookbooks/apache2/templates/ports.conf.erb
+    - update content in file /home/vagrant/jun3/cookbooks/apache2/templates/ports.conf.erb from none to e3b0c4
+    (diff output suppressed by config)
+/home/vagrant/jun3/cookbooks/apache2 >ls
+Berksfile  chefignore  metadata.rb  README.md  recipes  spec  templates  test
+/home/vagrant/jun3/cookbooks/apache2 >cd templates/
+/home/vagrant/jun3/cookbooks/apache2/templates >ls
+default  ports.conf.erb
+/home/vagrant/jun3/cookbooks/apache2/templates >vi ports.conf.erb
+/home/vagrant/jun3/cookbooks/apache2/templates >cd default/
+/home/vagrant/jun3/cookbooks/apache2/templates/default >ls
+/home/vagrant/jun3/cookbooks/apache2/templates/default >cd ..
+/home/vagrant/jun3/cookbooks/apache2/templates >ls
+default  ports.conf.erb
+/home/vagrant/jun3/cookbooks/apache2/templates >vi ports.conf.erv
+/home/vagrant/jun3/cookbooks/apache2/templates >vi ports.conf.erb
+/home/vagrant/jun3/cookbooks/apache2/templates >ls
+default  ports.conf.erb
+/home/vagrant/jun3/cookbooks/apache2/templates >cat ports.conf.erb
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default.conf
+
+Listen <%= node['apache']['port'] %>
+
+<IfModule ssl_module>
+        Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen 443
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+/home/vagrant/jun3/cookbooks/apache2/templates >cd ..
+/home/vagrant/jun3/cookbooks/apache2 >ls
+Berksfile  chefignore  metadata.rb  README.md  recipes  spec  templates  test
+/home/vagrant/jun3/cookbooks/apache2 >cd recipes/
+/home/vagrant/jun3/cookbooks/apache2/recipes >ls
+default.rb
+/home/vagrant/jun3/cookbooks/apache2/recipes >vi default.rb
+/home/vagrant/jun3/cookbooks/apache2/recipes >
+/home/vagrant/jun3/cookbooks/apache2/recipes >cd ../
+/home/vagrant/jun3/cookbooks/apache2 >ls templates/ports.conf.erb
+templates/ports.conf.erb
+/home/vagrant/jun3/cookbooks/apache2 >cat recipes/default.rb
+package 'apache2' do
+  action :install
+end
+
+service 'apache2' do
+  action :start
+end
+
+template '/etc/apache2/ports.conf' do
+  source 'ports.conf.erb'
+end
+/home/vagrant/jun3/cookbooks/apache2 >cat templates/ports.conf.erb
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default.conf
+
+Listen <%= node['apache']['port'] %>
+
+<IfModule ssl_module>
+        Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen 443
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+/home/vagrant/jun3/cookbooks/apache2 >vi recipes/default.rb
+/home/vagrant/jun3/cookbooks/apache2 >
+/home/vagrant/jun3/cookbooks/apache2 >cat recipes/default.rb
+node.default['apache']['port']=9999
+
+package 'apache2' do
+  action :install
+end
+
+service 'apache2' do
+  action :start
+end
+
+template '/etc/apache2/ports.conf' do
+  source 'ports.conf.erb'
+end
+/home/vagrant/jun3/cookbooks/apache2 >cat templates/ports.conf.erb
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default.conf
+
+Listen <%= node['apache']['port'] %>
+
+<IfModule ssl_module>
+        Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen 443
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+/home/vagrant/jun3/cookbooks/apache2 >
