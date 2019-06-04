@@ -362,3 +362,358 @@ ff02::2 ip6-allrouters
 10.1.1.33 chef-server.test
 10.1.1.34 node1-ubuntu
 /home/vagrant/jun3 >
+
+
+------------------------------------------------------------------------------------------------------------
+
+/home/vagrant/jun3/cookbooks >chef generate cookbook myvars
+Generating cookbook myvars
+- Ensuring correct cookbook file content
+- Committing cookbook files to git
+- Ensuring delivery configuration
+- Ensuring correct delivery build cookbook content
+- Adding delivery configuration to feature branch
+- Adding build cookbook to feature branch
+- Merging delivery content feature branch to master
+
+Your cookbook is ready. Type `cd myvars` to enter it.
+
+There are several commands you can run to get started locally developing and testing your cookbook.
+Type `delivery local --help` to see a full list.
+
+Why not start by writing a test? Tests for the default recipe are stored at:
+
+test/recipes/default_test.rb
+
+If you'd prefer to dive right in, the default recipe can be found at:
+
+recipes/default.rb
+
+/home/vagrant/jun3/cookbooks >mkdir myvars/attributes
+/home/vagrant/jun3/cookbooks >vi myvars/attributes/default.rb
+/home/vagrant/jun3/cookbooks >vi myvars/recipes/default.rb
+/home/vagrant/jun3/cookbooks >cd ..
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  node1-ubuntu-key.pem  nodes  stop.rb
+/home/vagrant/jun3 >rm -rf nodes/
+/home/vagrant/jun3 >
+/home/vagrant/jun3 >cat cookbooks/myvars/attributes/default.rb
+default['apache']['port']=9999
+/home/vagrant/jun3 >cat cookbooks/myvars/recipes/default.rb
+log "The value is #{node['apache']['port']}"
+/home/vagrant/jun3 >chef-client --local-mode --runlist 'recipe[myvars]'
+[2019-06-04T08:41:03+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T08:41:03+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T08:41:03+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T08:41:03+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T08:41:03+00:00] INFO: Chef-client pid: 4060
+[2019-06-04T08:41:07+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found: chefzero://localhost:8889/nodes/devopsadmin
+[2019-06-04T08:41:07+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x000000037a2ad0 @version=nil, @type=:recipe, @name="myvars">] from CLI options
+[2019-06-04T08:41:07+00:00] INFO: Run List is [recipe[myvars]]
+[2019-06-04T08:41:07+00:00] INFO: Run List expands to [myvars]
+[2019-06-04T08:41:07+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T08:41:07+00:00] INFO: Running start handlers
+[2019-06-04T08:41:07+00:00] INFO: Start handlers complete.
+[2019-06-04T08:41:07+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["myvars"]
+[2019-06-04T08:41:07+00:00] INFO: Loading cookbooks [myvars@0.1.0]
+Synchronizing Cookbooks:
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/recipes/default.rb in the cache.
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/README.md in the cache.
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/chefignore in the cache.
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/.gitignore in the cache.
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/attributes/default.rb in the cache.
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/Berksfile in the cache.
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/.kitchen.yml in the cache.
+[2019-06-04T08:41:07+00:00] INFO: Storing updated cookbooks/myvars/metadata.rb in the cache.
+  - myvars (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 1 resources
+Recipe: myvars::default
+  * log[The value is 9999] action write[2019-06-04T08:41:07+00:00] INFO: Processing log[The value is 9999] action write (myvars::default line 1)
+[2019-06-04T08:41:07+00:00] INFO: The value is 9999
+
+
+[2019-06-04T08:41:07+00:00] INFO: Chef Run complete in 0.290072806 seconds
+
+Running handlers:
+[2019-06-04T08:41:07+00:00] INFO: Running report handlers
+Running handlers complete
+[2019-06-04T08:41:07+00:00] INFO: Report handlers complete
+Chef Client finished, 1/1 resources updated in 03 seconds
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  node1-ubuntu-key.pem  nodes  stop.rb
+/home/vagrant/jun3 >cd nodes/
+/home/vagrant/jun3/nodes >ls
+devopsadmin.json
+/home/vagrant/jun3/nodes >vi devopsadmin.json
+/home/vagrant/jun3/nodes >
+/home/vagrant/jun3/nodes >cd ..
+/home/vagrant/jun3 >cd cookbooks/
+/home/vagrant/jun3/cookbooks >ls
+mycookbook-0.2.0  myvars
+/home/vagrant/jun3/cookbooks >vi myvars/attributes/default.rb
+/home/vagrant/jun3/cookbooks >vi myvars/recipes/default.rb
+/home/vagrant/jun3/cookbooks >cat myvars/attributes/default.rb
+default['apache']['port']=9999
+default['kernel']['name']=windows
+/home/vagrant/jun3/cookbooks >cat myvars/recipes/default.rb
+log "The value is #{node['apache']['port']}"
+log "The kernel name is #{node['kernel']['name']}"
+/home/vagrant/jun3/cookbooks >chef-client --local-mode --runlist 'recipe[myvars]'
+[2019-06-04T08:46:12+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T08:46:12+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T08:46:12+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T08:46:12+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T08:46:12+00:00] INFO: Chef-client pid: 4379
+[2019-06-04T08:46:14+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x00000003fad9c8 @version=nil, @type=:recipe, @name="myvars">] from CLI options
+[2019-06-04T08:46:14+00:00] INFO: Run List is [recipe[myvars]]
+[2019-06-04T08:46:14+00:00] INFO: Run List expands to [myvars]
+[2019-06-04T08:46:14+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T08:46:14+00:00] INFO: Running start handlers
+[2019-06-04T08:46:14+00:00] INFO: Start handlers complete.
+[2019-06-04T08:46:14+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["myvars"]
+[2019-06-04T08:46:14+00:00] INFO: Loading cookbooks [myvars@0.1.0]
+Synchronizing Cookbooks:
+[2019-06-04T08:46:14+00:00] INFO: Storing updated cookbooks/myvars/attributes/default.rb in the cache.
+[2019-06-04T08:46:14+00:00] INFO: Storing updated cookbooks/myvars/recipes/default.rb in the cache.
+  - myvars (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+windows
+
+================================================================================
+Recipe Compile Error in /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/myvars/attributes/default.rb
+================================================================================
+
+NoMethodError
+-------------
+Undefined method or attribute `windows' on `node'
+
+Cookbook Trace:
+---------------
+  /home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/myvars/attributes/default.rb:2:in `from_file'
+
+Relevant File Content:
+----------------------
+/home/vagrant/jun3/.chef/local-mode-cache/cache/cookbooks/myvars/attributes/default.rb:
+
+  1:  default['apache']['port']=9999
+  2>> default['kernel']['name']=windows
+  3:
+
+Platform:
+---------
+x86_64-linux
+
+
+Running handlers:
+[2019-06-04T08:46:14+00:00] ERROR: Running exception handlers
+Running handlers complete
+[2019-06-04T08:46:14+00:00] ERROR: Exception handlers complete
+Chef Client failed. 0 resources updated in 01 seconds
+[2019-06-04T08:46:14+00:00] FATAL: Stacktrace dumped to /home/vagrant/jun3/.chef/local-mode-cache/cache/chef-stacktrace.out
+[2019-06-04T08:46:14+00:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
+[2019-06-04T08:46:14+00:00] ERROR: Undefined method or attribute `windows' on `node'
+[2019-06-04T08:46:14+00:00] FATAL: Chef::Exceptions::ChildConvergeError: Chef run process exited unsuccessfully (exit code 1)
+/home/vagrant/jun3/cookbooks >vi myvars/attributes/default.rb                   /home/vagrant/jun3/cookbooks >chef-client --local-mode --runlist 'recipe[myvars]'
+[2019-06-04T08:46:37+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T08:46:37+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T08:46:37+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T08:46:37+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T08:46:37+00:00] INFO: Chef-client pid: 4602
+[2019-06-04T08:46:39+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x00000004f35878 @version=nil, @type=:recipe, @name="myvars">] from CLI options
+[2019-06-04T08:46:39+00:00] INFO: Run List is [recipe[myvars]]
+[2019-06-04T08:46:39+00:00] INFO: Run List expands to [myvars]
+[2019-06-04T08:46:39+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T08:46:39+00:00] INFO: Running start handlers
+[2019-06-04T08:46:39+00:00] INFO: Start handlers complete.
+[2019-06-04T08:46:39+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["myvars"]
+[2019-06-04T08:46:39+00:00] INFO: Loading cookbooks [myvars@0.1.0]
+Synchronizing Cookbooks:
+[2019-06-04T08:46:39+00:00] INFO: Storing updated cookbooks/myvars/attributes/default.rb in the cache.
+  - myvars (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: myvars::default
+  * log[The value is 9999] action write[2019-06-04T08:46:39+00:00] INFO: Processing log[The value is 9999] action write (myvars::default line 1)
+[2019-06-04T08:46:39+00:00] INFO: The value is 9999
+
+
+  * log[The kernel name is Linux] action write[2019-06-04T08:46:39+00:00] INFO: Processing log[The kernel name is Linux] action write (myvars::default line 2)
+[2019-06-04T08:46:39+00:00] INFO: The kernel name is Linux
+
+
+[2019-06-04T08:46:39+00:00] INFO: Chef Run complete in 0.153262497 seconds
+
+Running handlers:
+[2019-06-04T08:46:39+00:00] INFO: Running report handlers
+Running handlers complete
+[2019-06-04T08:46:39+00:00] INFO: Report handlers complete
+Chef Client finished, 2/2 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks >cd ..
+/home/vagrant/jun3 >vi nodes/devopsadmin.json
+/home/vagrant/jun3 >cd cookbooks/
+/home/vagrant/jun3/cookbooks >ls
+mycookbook-0.2.0  myvars
+/home/vagrant/jun3/cookbooks >cd my
+-bash: cd: my: No such file or directory
+/home/vagrant/jun3/cookbooks >cd myvars/
+/home/vagrant/jun3/cookbooks/myvars >ls
+attributes  Berksfile  chefignore  metadata.rb  README.md  recipes  spec  test
+/home/vagrant/jun3/cookbooks/myvars >vi recipes/
+/home/vagrant/jun3/cookbooks/myvars >vi recipes/default.rb
+/home/vagrant/jun3/cookbooks/myvars >
+/home/vagrant/jun3/cookbooks/myvars >chef-client --local-mode --runlist 'recipe[myvars]'
+[2019-06-04T08:50:40+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T08:50:40+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T08:50:40+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T08:50:40+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T08:50:40+00:00] INFO: Chef-client pid: 4897
+[2019-06-04T08:50:42+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x00000003efacd8 @version=nil, @type=:recipe, @name="myvars">] from CLI options
+[2019-06-04T08:50:42+00:00] INFO: Run List is [recipe[myvars]]
+[2019-06-04T08:50:42+00:00] INFO: Run List expands to [myvars]
+[2019-06-04T08:50:42+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T08:50:42+00:00] INFO: Running start handlers
+[2019-06-04T08:50:42+00:00] INFO: Start handlers complete.
+[2019-06-04T08:50:42+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["myvars"]
+[2019-06-04T08:50:42+00:00] INFO: Loading cookbooks [myvars@0.1.0]
+Synchronizing Cookbooks:
+[2019-06-04T08:50:42+00:00] INFO: Storing updated cookbooks/myvars/recipes/default.rb in the cache.
+  - myvars (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: myvars::default
+  * log[The value is 8888] action write[2019-06-04T08:50:42+00:00] INFO: Processing log[The value is 8888] action write (myvars::default line 3)
+[2019-06-04T08:50:42+00:00] INFO: The value is 8888
+
+
+  * log[The kernel name is Linux] action write[2019-06-04T08:50:42+00:00] INFO: Processing log[The kernel name is Linux] action write (myvars::default line 4)
+[2019-06-04T08:50:42+00:00] INFO: The kernel name is Linux
+
+
+[2019-06-04T08:50:42+00:00] INFO: Chef Run complete in 0.16845891 seconds
+
+Running handlers:
+[2019-06-04T08:50:42+00:00] INFO: Running report handlers
+Running handlers complete
+[2019-06-04T08:50:42+00:00] INFO: Report handlers complete
+Chef Client finished, 2/2 resources updated in 01 seconds
+/home/vagrant/jun3/cookbooks/myvars >
+/home/vagrant/jun3/cookbooks/myvars >cd ../..
+/home/vagrant/jun3 >cat cookbooks/myvars/attributes/default.rb
+default['apache']['port']=9999
+default['kernel']['name']='windows'
+/home/vagrant/jun3 >cat cookbooks/myvars/recipes/default.rb
+node.default['apache']['port']=8888
+
+log "The value is #{node['apache']['port']}"
+log "The kernel name is #{node['kernel']['name']}"
+/home/vagrant/jun3 >head -n 30 nodes/devopsadmin.json
+{
+  "name": "devopsadmin",
+  "normal": {
+    "tags": [
+
+    ]
+  },
+  "default": {
+    "apache": {
+      "port": 8888
+    },
+    "kernel": {
+      "name": "windows"
+    }
+  },
+  "automatic": {
+    "kernel": {
+      "name": "Linux",
+      "release": "3.2.0-23-generic",
+      "version": "#36-Ubuntu SMP Tue Apr 10 20:39:51 UTC 2012",
+      "machine": "x86_64",
+      "processor": "x86_64",
+      "os": "GNU/Linux",
+      "modules": {
+        "vboxsf": {
+          "size": "39541",
+          "refcount": "0",
+          "version": "4.2.0 (interface 0x00010004)"
+        },
+        "nfsd": {
+/home/vagrant/jun3 >vi cookbooks/myvars/attributes/default.rb
+/home/vagrant/jun3 >
+/home/vagrant/jun3 >cat cookbooks/myvars/attributes/default.rb
+force_default['apache']['port']=9999
+default['kernel']['name']='windows'
+/home/vagrant/jun3 >cat cookbooks/myvars/recipes/default.rb
+node.default['apache']['port']=8888
+
+log "The value is #{node['apache']['port']}"
+log "The kernel name is #{node['kernel']['name']}"
+/home/vagrant/jun3 >chef-client --local-mode --runlist 'recipe[myvars]'
+[2019-06-04T09:01:02+00:00] INFO: Started chef-zero at chefzero://localhost:8889 with repository at /home/vagrant/jun3
+  One version per cookbook
+
+[2019-06-04T09:01:02+00:00] INFO: Forking chef instance to converge...
+Starting Chef Client, version 12.16.42
+[2019-06-04T09:01:02+00:00] INFO: *** Chef 12.16.42 ***
+[2019-06-04T09:01:02+00:00] INFO: Platform: x86_64-linux
+[2019-06-04T09:01:02+00:00] INFO: Chef-client pid: 5216
+[2019-06-04T09:01:04+00:00] INFO: Setting the run_list to [#<Chef::RunList::RunListItem:0x0000000349e7d0 @version=nil, @type=:recipe, @name="myvars">] from CLI options
+[2019-06-04T09:01:04+00:00] INFO: Run List is [recipe[myvars]]
+[2019-06-04T09:01:04+00:00] INFO: Run List expands to [myvars]
+[2019-06-04T09:01:04+00:00] INFO: Starting Chef Run for devopsadmin
+[2019-06-04T09:01:04+00:00] INFO: Running start handlers
+[2019-06-04T09:01:04+00:00] INFO: Start handlers complete.
+[2019-06-04T09:01:04+00:00] INFO: HTTP Request Returned 404 Not Found: Object not found:
+resolving cookbooks for run list: ["myvars"]
+[2019-06-04T09:01:04+00:00] INFO: Loading cookbooks [myvars@0.1.0]
+Synchronizing Cookbooks:
+[2019-06-04T09:01:04+00:00] INFO: Storing updated cookbooks/myvars/attributes/default.rb in the cache.
+  - myvars (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 2 resources
+Recipe: myvars::default
+  * log[The value is 9999] action write[2019-06-04T09:01:04+00:00] INFO: Processing log[The value is 9999] action write (myvars::default line 3)
+[2019-06-04T09:01:04+00:00] INFO: The value is 9999
+
+
+  * log[The kernel name is Linux] action write[2019-06-04T09:01:04+00:00] INFO: Processing log[The kernel name is Linux] action write (myvars::default line 4)
+[2019-06-04T09:01:04+00:00] INFO: The kernel name is Linux
+
+
+[2019-06-04T09:01:04+00:00] INFO: Chef Run complete in 0.237375219 seconds
+
+Running handlers:
+[2019-06-04T09:01:04+00:00] INFO: Running report handlers
+Running handlers complete
+[2019-06-04T09:01:04+00:00] INFO: Report handlers complete
+Chef Client finished, 2/2 resources updated in 02 seconds
+/home/vagrant/jun3 >cat cookbooks/myvars/attributes/default.rb
+force_default['apache']['port']=9999
+default['kernel']['name']='windows'
+/home/vagrant/jun3 >cat cookbooks/myvars/recipes/default.rb
+node.default['apache']['port']=8888
+
+log "The value is #{node['apache']['port']}"
+log "The kernel name is #{node['kernel']['name']}"
+/home/vagrant/jun3 >
