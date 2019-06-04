@@ -1,0 +1,155 @@
+$ export PS1='$PWD >'
+/home/vagrant >
+/home/vagrant >cd jun3/
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >cat stop.rc
+cat: stop.rc: No such file or directory
+/home/vagrant/jun3 >cat stop.rb
+svc_names = ['tomcat7', 'apache2']
+
+svc_names.each do |svc|
+  log "Stopping service #{svc}"
+#  service "#{svc}" do
+  service svc do
+    action :stop
+  end
+end
+/home/vagrant/jun3 >ping 10.1.1.33
+PING 10.1.1.33 (10.1.1.33) 56(84) bytes of data.
+64 bytes from 10.1.1.33: icmp_req=1 ttl=64 time=0.946 ms
+64 bytes from 10.1.1.33: icmp_req=2 ttl=64 time=0.962 ms
+^C
+--- 10.1.1.33 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1008ms
+rtt min/avg/max/mdev = 0.946/0.954/0.962/0.008 ms
+/home/vagrant/jun3 >cat /etc/host
+host.conf    hostname     hosts        hosts.allow  hosts.deny
+/home/vagrant/jun3 >cat /etc/hosts
+127.0.0.1       localhost
+127.0.1.1       precise64
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+10.1.1.33 chef-server.test
+10.1.1.34 node1-ubuntu
+/home/vagrant/jun3 >ping chef-server.test
+PING chef-server.test (10.1.1.33) 56(84) bytes of data.
+64 bytes from chef-server.test (10.1.1.33): icmp_req=1 ttl=64 time=0.271 ms
+64 bytes from chef-server.test (10.1.1.33): icmp_req=2 ttl=64 time=0.278 ms
+64 bytes from chef-server.test (10.1.1.33): icmp_req=3 ttl=64 time=1.30 ms
+^C
+--- chef-server.test ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.271/0.618/1.306/0.486 ms
+/home/vagrant/jun3 >knife --version
+Chef: 12.16.42
+/home/vagrant/jun3 >mkdir .chef
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >ls -ltra
+total 32
+drwxr-xr-x 41 vagrant vagrant 4096 Jun  3 06:34 ..
+-rw-rw-r--  1 vagrant vagrant   85 Jun  3 08:50 apache.rb
+-rw-rw-r--  1 vagrant vagrant  159 Jun  3 09:20 stop.rb
+drwxrwxr-x  2 vagrant vagrant 4096 Jun  3 09:24 nodes
+drwxrwxr-x  3 vagrant vagrant 4096 Jun  3 09:37 cookbooks
+-rw-rw-r--  1 vagrant vagrant  277 Jun  3 10:59 helloworld.rb
+drwxrwxr-x  2 vagrant vagrant 4096 Jun  4 04:30 .chef
+drwxrwxr-x  5 vagrant vagrant 4096 Jun  4 04:30 .
+/home/vagrant/jun3 >cd .chef/
+/home/vagrant/jun3/.chef >vi knife.rb
+/home/vagrant/jun3/.chef >cat knife.rb
+# See http://docs.chef.io/config_rb_knife.html for more information on knife configuration options
+
+current_dir = File.dirname(__FILE__)
+log_level                :info
+log_location             STDOUT
+node_name                "devopsadmin"
+client_key               "#{current_dir}/admin.pem"
+chef_server_url          "https://chef-server.test/organizations/devopsdemo"
+cookbook_path            ["#{current_dir}/../cookbooks"]
+/home/vagrant/jun3/.chef >vi admin.pem
+/home/vagrant/jun3/.chef >vi admin.pem
+/home/vagrant/jun3/.chef >cat admin.pem
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAqj6DfcnHedrdghxU/2B6l79+iAUZsujZz7fkHt9gqnZG0w6N
+mE1am6Y/SLxpGADgE+HBlZXvz2itSi0tbLOfsBLcYXhYkO9nTkOLI72uQHlxy7na
+vPCmhJRJQ2kcCGOoE5PWzOgkqK5Xo8xXMxkXbzAxyvymxJkHZHYALixWi0uPl8dr
+L8yUcjNQ6Yoqfdnm91OtZTZQRXKZiJLb2D/7qHwWUgzuyCXYJNT5sccIgeqXKotc
+mx6LktD2STCerUMbdCDD5dAocg/rzVI5FEiZan84LtRjKyfFWWoTnboXQE8dG2eE
+i4gtmWhu35JW1l1IpJrYYzgeAv208YIUZ2wAmwIDAQABAoIBAGYqB7zX90ZQKrfn
+CrcKjec8+tDjxq1QAU4fO92vDZKeUhhcVmq8mRBpLvcWYjcOZ2pnA0YiaXxdhAjM
+ncLq9Hy0hN5VW0j28lbMP9aeANEeUEUC7pqODE/psSGsFS+PppDBGplzAnTb0yov
++XBnsWF/WZJIFkhK0V3fVnJfFzyVjAOD1IEJvzVqwNy6OR9RhmumIDMbXjWZzd7i
+X4C/6UPEdjmm5kZkIbYg7BLtTwHCAUetggG7XExsk+dla8/+zrjrinweDz3n4cOk
+CzYpxNi/X53BMAZ04R2n6b/MUWlZ4MVKqkyhPw9lPwf0Qyt+kNIeVehIlsIayCC5
+0joiGckCgYEA2McTaCV/l0wZEp2AmhB42bVxgLZwB/e9OWC7623wYY1gNxRJieDO
+/Fw6p0Xo+zFmqVQdnye0YBvLIc1ErBgFjpxAq4BaQKaapN8y2nLnWJNw34YLTXLp
+L6fd4ntMVzMCeVsKqxx8VsnwlzgKHtdrZnza4Dd+NffRjR0yA4raXs0CgYEAyQwO
+FFYFQYbeT7gQN7DAZMQLU56CyVyK+L8B6rMMaFG1soJlNpAWYmKvLRRATVunChVD
+ZlmLeHoBOdNqhiMarqkIlHAN0jXjnColIZlPAgk4kATno/Km7gu7dy6JDg3Cd98x
+ozKALg4x+fngwzCk7gEJ6Dt2Ujrmn3VeuZEvDQcCgYAq3jNYRRIWOVY7+CmWTeuY
+IelwKqO876Db1+VRiUwf/nUobzqbqXlFLnfq3EhWZE6I7blt38wrtVNWO+F4psdy
+jDO9toQihM/QCtNjn5VgTsfja/6QMkkqw2d9giR2mf/DP928OMXd49FQFiTqNG9o
+tQgTjuXGhltKLJvXV34XgQKBgQClT8RD9Hdd6gfihPbQ1AVe1dR6bVwdNnsPDgAF
+fDQ3kvhUT+PpeZDuVTa1WnGFKlevcsx43ChSZ/+aDL0KjtLhyxvC8mBq+OSvA/iE
+KAtPIUXhJidSJ7QbCIqc9Sa855N//YZTKrM7K3Dsmwq1dMoo6bG7wykHdGctttSs
+wTRvAQKBgBsH1wwVuFjVzu0UDFJy0Aa5Xk7n7A/625sRbxUu+3Qzw50k2J1Cy2AB
+YSSpP5iXy1Iwr6/FPzoBzYfJUZoLwpEu77mBvHvJz8oiy3VXxEM12zK6QdjRkck9
+DG24qYOHp2RbxggCYJGfqHCzlToWiffqKJDIegsFDojOeNb+5hh4
+-----END RSA PRIVATE KEY-----
+/home/vagrant/jun3/.chef >ls -ltra
+total 16
+drwxrwxr-x 5 vagrant vagrant 4096 Jun  4 04:30 ..
+-rw-rw-r-- 1 vagrant vagrant  425 Jun  4 04:34 knife.rb
+-rw-rw-r-- 1 vagrant vagrant 1675 Jun  4 04:36 admin.pem
+drwxrwxr-x 2 vagrant vagrant 4096 Jun  4 04:36 .
+/home/vagrant/jun3/.chef >cd ..
+/home/vagrant/jun3 >ping chef-server.test
+PING chef-server.test (10.1.1.33) 56(84) bytes of data.
+64 bytes from chef-server.test (10.1.1.33): icmp_req=1 ttl=64 time=0.972 ms
+64 bytes from chef-server.test (10.1.1.33): icmp_req=2 ttl=64 time=1.23 ms
+^C
+--- chef-server.test ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.972/1.103/1.234/0.131 ms
+/home/vagrant/jun3 >ls -ltra .chef
+total 16
+drwxrwxr-x 5 vagrant vagrant 4096 Jun  4 04:30 ..
+-rw-rw-r-- 1 vagrant vagrant  425 Jun  4 04:34 knife.rb
+-rw-rw-r-- 1 vagrant vagrant 1675 Jun  4 04:36 admin.pem
+drwxrwxr-x 2 vagrant vagrant 4096 Jun  4 04:36 .
+/home/vagrant/jun3 >cat .chef/knife.rb
+# See http://docs.chef.io/config_rb_knife.html for more information on knife configuration options
+
+current_dir = File.dirname(__FILE__)
+log_level                :info
+log_location             STDOUT
+node_name                "devopsadmin"
+client_key               "#{current_dir}/admin.pem"
+chef_server_url          "https://chef-server.test/organizations/devopsdemo"
+cookbook_path            ["#{current_dir}/../cookbooks"]
+/home/vagrant/jun3 >cd /vagrant
+/vagrant >ls
+admin.pem  knife.rb  ohai.txt  vagrant_private_key
+/vagrant >cd -
+/home/vagrant/jun3
+/home/vagrant/jun3 >ls
+apache.rb  cookbooks  helloworld.rb  nodes  stop.rb
+/home/vagrant/jun3 >knife ssl fetch
+WARNING: Certificates from chef-server.test will be fetched and placed in your trusted_cert
+directory (/home/vagrant/jun3/.chef/trusted_certs).
+
+Knife has no means to verify these are the correct certificates. You should
+verify the authenticity of these certificates after downloading.
+
+Adding certificate for chef-server_test in /home/vagrant/jun3/.chef/trusted_certs/chef-server_test.crt
+/home/vagrant/jun3 >knife ssl check
+Connecting to host chef-server.test:443
+Successfully verified certificates from `chef-server.test'
+/home/vagrant/jun3 >
