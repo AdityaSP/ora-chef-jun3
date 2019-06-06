@@ -943,3 +943,77 @@ Running handlers complete
 [2019-06-06T08:49:25+00:00] INFO: Report handlers complete
 Chef Client finished, 9/13 resources updated in 07 seconds
 /home/vagrant/jun3>
+
+
+
+------------------------------------------------------------------
+/home/vagrant/jun3> cat data_bags/users/aditya.json
+{
+  "id": "aditya",
+  "home": "/home/aditya",
+  "shell": "/bin/bash",
+  "group": "aditya"
+}
+/home/vagrant/jun3> cat data_bags/users/arun.json
+{
+  "id": "arun",
+  "home": "/home/arun",
+  "shell": "/bin/bash",
+  "group": "arun"
+}
+/home/vagrant/jun3> #knife data_bag create users
+/home/vagrant/jun3> #knife data_bag from file users arun.json
+/home/vagrant/jun3> #knife data_bag from file users aditya.json
+/home/vagrant/jun3> cat cookbooks/user/recipes/default.rb
+users = search("users", "*:*")
+
+users.each do |login|
+  user login["id"] do
+    home login['home']
+    shell login['shell']
+    password '$1$aNenDpoI$26X77RXKaD.iFKZjlMdMT.'
+  end
+
+  group login['group'] do
+    action :create
+    members login['id']
+  end
+
+  directory login['home'] do
+    owner login['id']
+    group login['id']
+    mode '0755'
+    action :create
+  end
+end
+/home/vagrant/jun3> grep version cookbooks/user/metadata.rb
+version '0.2.0'
+/home/vagrant/jun3> #knife cookbook upload user
+/home/vagrant/jun3> cat environments/dev.json
+{
+    "name": "dev",
+    "description": "For Dev Env",
+    "json_class": "Chef::Environment",
+    "chef_type": "environment",
+    "cookbook_versions": { "apache2": "= 0.1.0" , "user": "= 0.2.0"},
+
+    "override_attributes": {
+        "apache": { "port": "8087" }
+    }
+}
+/home/vagrant/jun3> cat environments/prod.json
+{
+    "name": "prod",
+    "description": "For Dev Env",
+    "json_class": "Chef::Environment",
+    "chef_type": "environment",
+    "cookbook_versions": { "apache2": "= 0.1.0", "user": "= 0.1.0" },
+    "override_attributes": {
+        "apache": { "port": "8090" }
+    }
+}
+/home/vagrant/jun3> #knife environment from file prod.json
+/home/vagrant/jun3> #knife environment from file dev.json
+/home/vagrant/jun3> #knife ssh 10.1.1.34 'sudo chef-client -E prod' --manual-list --ssh-user vagrant
+/home/vagrant/jun3> #knife ssh 10.1.1.34 'sudo chef-client -E dev' --manual-list --ssh-user vagrant
+/home/vagrant/jun3>
