@@ -1100,3 +1100,142 @@ id:          oskey
 product_key: 123l-23lkj-3423l-123lj
 /home/vagrant/jun3>
 
+
+-----------------------------------------------------------------------
+
+
+
+/home/vagrant/jun3> ls encrypted_data_bag_secret
+encrypted_data_bag_secret
+/home/vagrant/jun3> pwd
+/home/vagrant/jun3
+/home/vagrant/jun3> ls -ltra /home/vagrant/jun3/e                               ncrypted_data_bag_secret
+-rw-rw-r-- 1 vagrant vagrant 684 Jun  6 10:15 /ho                               me/vagrant/jun3/encrypted_data_bag_secret
+/home/vagrant/jun3>
+/home/vagrant/jun3>
+/home/vagrant/jun3> #chef generate cookbook
+/home/vagrant/jun3> cd cookbooks/
+/home/vagrant/jun3/cookbooks> chef generate cookbook enc_data
+Generating cookbook enc_data
+- Ensuring correct cookbook file content
+- Committing cookbook files to git
+- Ensuring delivery configuration
+- Ensuring correct delivery build cookbook content
+- Adding delivery configuration to feature branch
+- Adding build cookbook to feature branch
+- Merging delivery content feature branch to master
+
+Your cookbook is ready. Type `cd enc_data` to enter it.
+
+There are several commands you can run to get started locally developing and testing your cookbook.
+Type `delivery local --help` to see a full list.
+
+Why not start by writing a test? Tests for the default recipe are stored at:
+
+test/recipes/default_test.rb
+
+If you'd prefer to dive right in, the default recipe can be found at:
+
+recipes/default.rb
+
+/home/vagrant/jun3/cookbooks> vi enc_data/
+Berksfile     .git/         metadata.rb   spec/
+chefignore    .gitignore    README.md     test/
+.delivery/    .kitchen.yml  recipes/
+/home/vagrant/jun3/cookbooks> vi enc_data/recipes/default.rb
+/home/vagrant/jun3/cookbooks> cd ..
+/home/vagrant/jun3> cat data_bags/keys/os.json
+{
+ "id": "oskey",
+ "product_key": "123l-23lkj-3423l-123lj"
+}
+/home/vagrant/jun3> cat cookbooks/enc_data/recipes/default.rb
+secret = Chef::EncryptedDataBagItem.load_secret("/etc/chef/encrypted_data_bag_secret")
+
+oskey = Chef::EncryptedDataBagItem.load("keys", "oskey", secret)
+
+log oskey.to_s
+log oskey['id']
+log oskey['product_key']
+/home/vagrant/jun3> knife cookbook upload enc_data
+Uploading enc_data       [0.1.0]
+Uploaded 1 cookbook.
+/home/vagrant/jun3> knife node run_list add node1-ubuntu 'recipe[enc_data]'
+node1-ubuntu:
+  run_list:
+    role[webserver]
+    recipe[enc_data]
+/home/vagrant/jun3> knife ssh 10.1.1.34 'sudo chef-client -E dev' --manual-list --ssh-user vagrant
+10.1.1.34 bash: warning: setlocale: LC_ALL: cannot change locale (en_US)
+10.1.1.34 [2019-06-06T10:49:33+00:00] INFO: Forking chef instance to converge...
+10.1.1.34 Starting Chef Client, version 12.21.4
+10.1.1.34 [2019-06-06T10:49:33+00:00] INFO: *** Chef 12.21.4 ***
+10.1.1.34 [2019-06-06T10:49:33+00:00] INFO: Platform: x86_64-linux
+10.1.1.34 [2019-06-06T10:49:33+00:00] INFO: Chef-client pid: 4312
+10.1.1.34 [2019-06-06T10:49:33+00:00] INFO: The plugin path /etc/chef/ohai/plugins does not exist. Skipping...
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Run List is [role[webserver], recipe[enc_data]]
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Run List expands to [apache2, user, enc_data]
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Starting Chef Run for node1-ubuntu
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Running start handlers
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Start handlers complete.
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Error while reporting run start to Data Collector. URL: https://chef-server.test/organizations/devopsdemo/data-collector Exception: 404 -- 404 "Not Found"  (This is normal if you do not have Chef Automate)
+10.1.1.34 resolving cookbooks for run list: ["apache2", "user", "enc_data"]
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Loading cookbooks [apache2@0.1.0, user@0.2.0, enc_data@0.1.0]
+10.1.1.34 Synchronizing Cookbooks:
+10.1.1.34   - apache2 (0.1.0)
+10.1.1.34   - user (0.2.0)
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Storing updated cookbooks/enc_data/README.md in the cache.
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Storing updated cookbooks/enc_data/recipes/default.rb in the cache.
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Storing updated cookbooks/enc_data/chefignore in the cache.
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Storing updated cookbooks/enc_data/.kitchen.yml in the cache.
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Storing updated cookbooks/enc_data/metadata.rb in the cache.
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Storing updated cookbooks/enc_data/.gitignore in the cache.
+10.1.1.34 [2019-06-06T10:49:36+00:00] INFO: Storing updated cookbooks/enc_data/Berksfile in the cache.
+10.1.1.34   - enc_data (0.1.0)
+10.1.1.34 Installing Cookbook Gems:
+10.1.1.34 Compiling Cookbooks...
+10.1.1.34 [2019-06-06T10:49:37+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 Converging 12 resources
+10.1.1.34 Recipe: apache2::default
+10.1.1.34   * apt_package[apache2] action install[2019-06-06T10:49:37+00:00] INFO: Processing apt_package[apache2] action install (apache2::default line 3)
+10.1.1.34  (up to date)
+10.1.1.34   * template[/etc/apache2/ports.conf] action create[2019-06-06T10:49:37+00:00] INFO: Processing template[/etc/apache2/ports.conf] action create (apache2::default line 8)
+10.1.1.34  (up to date)
+10.1.1.34   * service[restart apache] action nothing[2019-06-06T10:49:37+00:00] INFO: Processing service[restart apache] action nothing (apache2::default line 13)
+10.1.1.34  (skipped due to action :nothing)
+10.1.1.34 Recipe: user::default
+10.1.1.34   * linux_user[aditya] action create[2019-06-06T10:49:37+00:00] INFO: Processing linux_user[aditya] action create (user::default line 4)
+10.1.1.34  (up to date)
+10.1.1.34   * group[aditya] action create[2019-06-06T10:49:37+00:00] INFO: Processing group[aditya] action create (user::default line 10)
+10.1.1.34  (up to date)
+10.1.1.34   * directory[/home/aditya] action create[2019-06-06T10:49:37+00:00] INFO: Processing directory[/home/aditya] action create (user::default line 15)
+10.1.1.34  (up to date)
+10.1.1.34   * linux_user[arun] action create[2019-06-06T10:49:37+00:00] INFO: Processing linux_user[arun] action create (user::default line 4)
+10.1.1.34  (up to date)
+10.1.1.34   * group[arun] action create[2019-06-06T10:49:37+00:00] INFO: Processing group[arun] action create (user::default line 10)
+10.1.1.34  (up to date)
+10.1.1.34   * directory[/home/arun] action create[2019-06-06T10:49:37+00:00] INFO: Processing directory[/home/arun] action create (user::default line 15)
+10.1.1.34  (up to date)
+10.1.1.34 Recipe: enc_data::default
+10.1.1.34   * log[#<Chef::EncryptedDataBagItem:0x00000004352fd8>] action write[2019-06-06T10:49:37+00:00] INFO: Processing log[#<Chef::EncryptedDataBagItem:0x00000004352fd8>] action write (enc_data::default line 5)
+10.1.1.34 [2019-06-06T10:49:37+00:00] INFO: #<Chef::EncryptedDataBagItem:0x00000004352fd8>
+10.1.1.34
+10.1.1.34
+10.1.1.34   * log[oskey] action write[2019-06-06T10:49:37+00:00] INFO: Processing log[oskey] action write (enc_data::default line 6)
+10.1.1.34 [2019-06-06T10:49:37+00:00] INFO: oskey
+10.1.1.34
+10.1.1.34
+10.1.1.34   * log[123l-23lkj-3423l-123lj] action write[2019-06-06T10:49:37+00:00] INFO: Processing log[123l-23lkj-3423l-123lj] action write (enc_data::default line 7)
+10.1.1.34 [2019-06-06T10:49:37+00:00] INFO: 123l-23lkj-3423l-123lj
+10.1.1.34
+10.1.1.34
+10.1.1.34 [2019-06-06T10:49:37+00:00] INFO: Chef Run complete in 1.138851377 seconds
+10.1.1.34
+10.1.1.34 Running handlers:
+10.1.1.34 [2019-06-06T10:49:37+00:00] INFO: Running report handlers
+10.1.1.34 Running handlers complete
+10.1.1.34 [2019-06-06T10:49:37+00:00] INFO: Report handlers complete
+10.1.1.34 Chef Client finished, 3/12 resources updated in 04 seconds
+/home/vagrant/jun3>
