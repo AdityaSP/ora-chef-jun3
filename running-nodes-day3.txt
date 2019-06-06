@@ -1017,3 +1017,86 @@ version '0.2.0'
 /home/vagrant/jun3> #knife ssh 10.1.1.34 'sudo chef-client -E prod' --manual-list --ssh-user vagrant
 /home/vagrant/jun3> #knife ssh 10.1.1.34 'sudo chef-client -E dev' --manual-list --ssh-user vagrant
 /home/vagrant/jun3>
+
+
+------------------------------------------------------------------------------------------------
+/home/vagrant/jun3/data_bags> mkdir keys
+/home/vagrant/jun3/data_bags> cd keys/
+/home/vagrant/jun3/data_bags/keys> ls
+/home/vagrant/jun3/data_bags/keys> vi os.json
+/home/vagrant/jun3/data_bags/keys>
+/home/vagrant/jun3/data_bags/keys> cat os.json
+{
+ "id": "oskey",
+ "product_key": "123l-23lkj-3423l-123lj"
+}
+/home/vagrant/jun3/data_bags/keys> knife data_bag show users aditya
+WARNING: Unencrypted data bag detected, ignoring any provided secret options.
+group: aditya
+home:  /home/aditya
+id:    aditya
+shell: /bin/bash
+/home/vagrant/jun3/data_bags/keys>
+/home/vagrant/jun3/data_bags/keys> cd ...
+-bash: cd: ...: No such file or directory
+/home/vagrant/jun3/data_bags/keys> cd ..
+/home/vagrant/jun3/data_bags> ls
+keys  users
+/home/vagrant/jun3/data_bags> cd ..
+/home/vagrant/jun3> ls -ltra data_bags/keys/
+total 12
+drwxrwxr-x 4 vagrant vagrant 4096 Jun  6 10:10 ..
+-rw-rw-r-- 1 vagrant vagrant   61 Jun  6 10:11 os.json
+drwxrwxr-x 2 vagrant vagrant 4096 Jun  6 10:11 .
+/home/vagrant/jun3> cat data_bags/keys/os.json
+{
+ "id": "oskey",
+ "product_key": "123l-23lkj-3423l-123lj"
+}
+/home/vagrant/jun3> openssl rand -base64 512
+At8SNtUZKpCpuzSAl6t5+gINLI2pKkmoM3ufLjx2NuyD9t+QIxfGdchf04vXxSz5
+/IwMAg7QWzczFWC59zm1+ACYv/QQB3uAFdx9kHUR7//8qtYfZvJhniA8fNNjhOhy
+dOqkK/EC33rgPkL/FfVYbQoxjX5g+USjLwjBkYayzOCP79fDXFwSGE2tWvxzAiYE
+J3QErwmgQfljkavF2uL9CZrcdOINC8yDLWxPrAym2dMYaEAyB9Xxq6hsvIFOdCmE
+cKTK32qwcDhmkndfGPmRC//Obu3dpHRc7GT6hxz941jTsYT956K3tXhxm/jrNSCN
+Qzb1zVGqzM9O8P3IP8kYUOe6c3hBKuDhnkDPJXP/jnOV7ZrDSMcgL/M/Pbl4R3b3
+Ngb4nnibIlOV90+N1b0zSB2gyBAZ+XOcwvtSFfdddL9kSPJYYtUQsFfRUH886fOo
+Ti75tr3HhkPZFS3B07m0dk1qj3Ocno3qJyJpZXz18gYv7cAt4LYhg7p+os1S5H4Q
+z0lrocwDep9GSetWqKOxI97B0clTgm5befYijGPIT5VIasLd2n/Dbt0cw+eyfVAv
+5pIXkORrueuupnFXFxh7vVH+glj1NX9MxjOISNdwnWDtN4HukF+UPU1lNxLIdNS/
+yM7MfGziP8dk+Ie13x+aTamPKP13b3MwClt4rBNxsy0=
+/home/vagrant/jun3> openssl rand -base64 512 | tr -d '\r\n' > encrypted_data_bag_secret
+/home/vagrant/jun3> ls
+apache.rb  encrypted_data_bag_secret  node1-ubuntu-key.pem  stop.rb
+cookbooks  environments               nodes
+data_bags  helloworld.rb              roles
+/home/vagrant/jun3> cat en
+cat: en: No such file or directory
+/home/vagrant/jun3> cat encrypted_data_bag_secret
+qqxeRtR1oFzst6EJt4OQ07rA40Q8JLLwEblS2Ifa56I5EmcCtRbAn5rcuEqpWg0HdEG/oh7q6PlsHXNeLbJMckz3xK0hKLylHQHngdQP/SbNH26HgTpjQ0AldTI1MvzEqI3v8uIc8/xkRnZ/R3DtWFU99/44KHSTNfJPzKEODjD+tOjCIdenuXH0KplI3pyzdFwJ0bfrZZHp6EJn9ncUE6t1wsTer0xmGak+WCr0ji3TtTfwE2k+bmzlX7s/zmhzMRvNkwSZiwTHuYkE4OaQ5epXeN1a4UDQ5LwZQw8JmRdqE3VCXuhAlvtlEWDfhkS/VzDuPyR9s4ohoFn+ehTLohezyogBr/xfetj5jZnROlKdJgDW1AFT0uaU2O8Cma5FMzLRjT3Kcenp9vB+UcPWNCJnCQRbjQoFK3ZdvhTORsZ/SdF6mf9Ap3yyLG+aPVf99Aw7HoXsNGCgiAg77vX/mmTW+a32s6ONF3HClens0yt56M7WJh1nDhOR/qXP2tP3aerl0dgg1ElevI4QWZXAgA72QxYW5ok0/qt1kHad5KbqEtphny7qP8QUSlrFhRLb4wqk9RmxMLETgf8tP8V6tb59bANqG8CJ9y4XpKv2Q83ECA2CTf8pzVPKg0zaEL438UneB3aW4eTZ4uKPwugxOPcytC43OWiB8/ZYUOBOkGA=/home/vagrant/jun3>
+/home/vagrant/jun3>
+/home/vagrant/jun3> knife data_bag create keys
+Created data_bag[keys]
+/home/vagrant/jun3> knife data_bag list
+keys
+node
+users
+/home/vagrant/jun3> knife data_bag from file keys os.json --secret-file encrypted_data_bag_secret
+Updated data_bag_item[keys::oskey]
+/home/vagrant/jun3> knife data_bag show keys oskey
+WARNING: Encrypted data bag detected, but no secret provided for decoding. Displaying encrypted data.
+id:          oskey
+product_key:
+  cipher:         aes-256-cbc
+  encrypted_data: cwIR2ak3XE2EG3C+GFMRQyVxWd5T58qB0z+R+PzEZXMzNLGdiyvkJIkQo88n
+  ZJgD
+
+  iv:             yNxjoVQh6DPHHVNoL7HEmw==
+
+  version:        1
+/home/vagrant/jun3> knife data_bag show keys oskey --secret-file encrypted_data_bag_secret
+Encrypted data bag detected, decrypting with provided secret.
+id:          oskey
+product_key: 123l-23lkj-3423l-123lj
+/home/vagrant/jun3>
+
