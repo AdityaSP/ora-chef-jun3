@@ -1,0 +1,244 @@
+/home/vagrant/jun3> knife ssl check
+
+Connecting to host chef-server.test:443
+Successfully verified certificates from `chef-server.test'
+/home/vagrant/jun3>
+/home/vagrant/jun3> ls -a
+.   apache.rb  cookbooks      node1-ubuntu-key.pem  stop.rb
+..  .chef      helloworld.rb  nodes
+/home/vagrant/jun3> cd .chef
+/home/vagrant/jun3/.chef> ls
+admin.pem  knife.rb  local-mode-cache  syntaxcache  trusted_certs
+/home/vagrant/jun3/.chef> cd ..
+/home/vagrant/jun3> ls
+apache.rb  cookbooks  helloworld.rb  node1-ubuntu-key.pem  nodes  stop.rb
+/home/vagrant/jun3> knife node list
+ERROR: Server returned error 500 for https://chef-server.test/organizations/devopsdemo/nodes, retrying 1/5 in 3s
+node1-ubuntu
+/home/vagrant/jun3> knife node show node1-ubuntu
+Node Name:   node1-ubuntu
+Environment: _default
+FQDN:        node1-ubuntu
+IP:          10.0.2.15
+Run List:    recipe[apache2]
+Roles:
+Recipes:     apache2, apache2::default
+Platform:    ubuntu 14.04
+Tags:
+/home/vagrant/jun3> cd cookbooks/
+/home/vagrant/jun3/cookbooks> chef generate cookbook user
+Generating cookbook user
+- Ensuring correct cookbook file content
+- Committing cookbook files to git
+- Ensuring delivery configuration
+- Ensuring correct delivery build cookbook content
+- Adding delivery configuration to feature branch
+- Adding build cookbook to feature branch
+- Merging delivery content feature branch to master
+
+Your cookbook is ready. Type `cd user` to enter it.
+
+There are several commands you can run to get started locally developing and testing your cookbook.
+Type `delivery local --help` to see a full list.
+
+Why not start by writing a test? Tests for the default recipe are stored at:
+
+test/recipes/default_test.rb
+
+If you'd prefer to dive right in, the default recipe can be found at:
+
+recipes/default.rb
+
+/home/vagrant/jun3/cookbooks> vi user/recipes/default.rb
+/home/vagrant/jun3/cookbooks> vi user/recipes/default.rb
+/home/vagrant/jun3/cookbooks> cat user/recipes/default.rb
+user 'userjun6' do
+  home '/home/userjun6'
+  shell '/bin/bash'
+  password '$1$aNenDpoI$26X77RXKaD.iFKZjlMdMT.'
+end
+
+group 'userjun6' do
+  action :create
+  members 'userjun6'
+end
+
+directory '/home/userjun6' do
+  owner 'userjun6'
+  group 'userjun6'
+  mode '0755'
+  action :create
+end
+/home/vagrant/jun3/cookbooks> knife cookbook upload user
+Uploading user           [0.1.0]
+Uploaded 1 cookbook.
+/home/vagrant/jun3/cookbooks> knife cookbook show user
+user   0.1.0
+/home/vagrant/jun3/cookbooks> cd ..
+/home/vagrant/jun3> ls
+apache.rb  cookbooks  helloworld.rb  node1-ubuntu-key.pem  nodes  stop.rb
+/home/vagrant/jun3> mkdir roles
+/home/vagrant/jun3> ls
+apache.rb  helloworld.rb         nodes  stop.rb
+cookbooks  node1-ubuntu-key.pem  roles
+/home/vagrant/jun3> vi roles/webserver.json
+/home/vagrant/jun3> ^C
+/home/vagrant/jun3> vi roles/webserver.json
+/home/vagrant/jun3> cat roles/webserver.json
+{
+  "name": "webserver",
+  "json_class": "Chef::Role",
+  "chef_type": "role",
+  "run_list": [
+                "recipe[apache2]",
+                "recipe[user]"
+              ]
+}
+/home/vagrant/jun3> knife role from file webserver.json
+Updated Role webserver
+/home/vagrant/jun3> knife role --help
+FATAL: Cannot find subcommand for: 'role --help'
+Available role subcommands: (for details, knife SUB-COMMAND --help)
+
+** ROLE COMMANDS **
+knife role bulk delete REGEX (options)
+knife role create ROLE (options)
+knife role delete ROLE (options)
+knife role edit ROLE (options)
+knife role env_run_list add [ROLE] [ENVIRONMENT] [ENTRY[,ENTRY]] (options)
+knife role env_run_list clear [ROLE] [ENVIRONMENT]
+knife role env_run_list remove [ROLE] [ENVIRONMENT] [ENTRIES]
+knife role env_run_list replace [ROLE] [ENVIRONMENT] [OLD_ENTRY] [NEW_ENTRY]
+knife role env_run_list set [ROLE] [ENVIRONMENT] [ENTRIES]
+knife role from file FILE [FILE..] (options)
+knife role list (options)
+knife role run_list add [ROLE] [ENTRY[,ENTRY]] (options)
+knife role run_list clear [ROLE]
+knife role run_list remove [ROLE] [ENTRY]
+knife role run_list replace [ROLE] [OLD_ENTRY] [NEW_ENTRY]
+knife role run_list set [ROLE] [ENTRIES]
+knife role show ROLE (options)
+
+/home/vagrant/jun3> knife role list
+webserver
+/home/vagrant/jun3> knife role edit webserver
+ERROR: RuntimeError: Please set EDITOR environment variable
+/home/vagrant/jun3> export EDITOR=vi
+/home/vagrant/jun3> knife role edit webserver
+Object unchanged, not saving
+/home/vagrant/jun3> knife role show webserver
+chef_type:           role
+default_attributes:
+description:
+env_run_lists:
+json_class:          Chef::Role
+name:                webserver
+override_attributes:
+run_list:
+  recipe[apache2]
+  recipe[user]
+/home/vagrant/jun3> cd cookbooks/
+/home/vagrant/jun3/cookbooks> l
+apache2/  mycookbook-0.2.0/  myvars/  user/
+/home/vagrant/jun3/cookbooks> cd ..
+/home/vagrant/jun3> #knife node run_list set node1-ubuntu 'role[webserver]'
+/home/vagrant/jun3> knife node show node1-ubuntu
+Node Name:   node1-ubuntu
+Environment: _default
+FQDN:        node1-ubuntu
+IP:          10.0.2.15
+Run List:    recipe[apache2]
+Roles:
+Recipes:     apache2, apache2::default
+Platform:    ubuntu 14.04
+Tags:
+/home/vagrant/jun3> knife node run_list set node1-ubuntu 'role[webserver]'
+node1-ubuntu:
+  run_list: role[webserver]
+/home/vagrant/jun3> knife node show node1-ubuntu
+Node Name:   node1-ubuntu
+Environment: _default
+FQDN:        node1-ubuntu
+IP:          10.0.2.15
+Run List:    role[webserver]
+Roles:
+Recipes:     apache2, apache2::default
+Platform:    ubuntu 14.04
+Tags:
+/home/vagrant/jun3> knife ssh 10.1.1.34 'sudo chef-client' --manual-list --ssh-user vagrant
+10.1.1.34 bash: warning: setlocale: LC_ALL: cannot change locale (en_US)
+10.1.1.34 [2019-06-06T05:19:14+00:00] INFO: Forking chef instance to converge...
+10.1.1.34 Starting Chef Client, version 12.21.4
+10.1.1.34 [2019-06-06T05:19:15+00:00] INFO: *** Chef 12.21.4 ***
+10.1.1.34 [2019-06-06T05:19:15+00:00] INFO: Platform: x86_64-linux
+10.1.1.34 [2019-06-06T05:19:15+00:00] INFO: Chef-client pid: 1758
+10.1.1.34 [2019-06-06T05:19:15+00:00] INFO: The plugin path /etc/chef/ohai/plugins does not exist. Skipping...
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: Run List is [role[webserver]]
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: Run List expands to [apache2, user]
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: Starting Chef Run for node1-ubuntu
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: Running start handlers
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: Start handlers complete.
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 [2019-06-06T05:19:21+00:00] INFO: Error while reporting run start to Data Collector. URL: https://chef-server.test/organizations/devopsdemo/data-collector Exception: 404 -- 404 "Not Found"  (This is normal if you do not have Chef Automate)
+10.1.1.34 resolving cookbooks for run list: ["apache2", "user"]
+10.1.1.34 [2019-06-06T05:19:22+00:00] INFO: Loading cookbooks [apache2@0.1.0, user@0.1.0]
+10.1.1.34 Synchronizing Cookbooks:
+10.1.1.34   - apache2 (0.1.0)
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: Storing updated cookbooks/user/recipes/default.rb in the cache.
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: Storing updated cookbooks/user/.kitchen.yml in the cache.
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: Storing updated cookbooks/user/Berksfile in the cache.
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: Storing updated cookbooks/user/chefignore in the cache.
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: Storing updated cookbooks/user/.gitignore in the cache.
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: Storing updated cookbooks/user/metadata.rb in the cache.
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: Storing updated cookbooks/user/README.md in the cache.
+10.1.1.34   - user (0.1.0)
+10.1.1.34 Installing Cookbook Gems:
+10.1.1.34 Compiling Cookbooks...
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: HTTP Request Returned 404 Not Found:
+10.1.1.34 Converging 6 resources
+10.1.1.34 Recipe: apache2::default
+10.1.1.34   * apt_package[apache2] action install[2019-06-06T05:19:23+00:00] INFO: Processing apt_package[apache2] action install (apache2::default line 3)
+10.1.1.34  (up to date)
+10.1.1.34   * template[/etc/apache2/ports.conf] action create[2019-06-06T05:19:23+00:00] INFO: Processing template[/etc/apache2/ports.conf] action create (apache2::default line 8)
+10.1.1.34  (up to date)
+10.1.1.34   * service[restart apache] action nothing[2019-06-06T05:19:23+00:00] INFO: Processing service[restart apache] action nothing (apache2::default line 13)
+10.1.1.34  (skipped due to action :nothing)
+10.1.1.34 Recipe: user::default
+10.1.1.34   * linux_user[userjun6] action create[2019-06-06T05:19:23+00:00] INFO: Processing linux_user[userjun6] action create (user::default line 1)
+10.1.1.34 [2019-06-06T05:19:23+00:00] INFO: linux_user[userjun6] created
+10.1.1.34
+10.1.1.34     - create user userjun6
+10.1.1.34   * group[userjun6] action create[2019-06-06T05:19:23+00:00] INFO: Processing group[userjun6] action create (user::default line 7)
+10.1.1.34 [2019-06-06T05:19:24+00:00] INFO: group[userjun6] altered
+10.1.1.34
+10.1.1.34     - alter group userjun6
+10.1.1.34     - replace group members with new list of members
+10.1.1.34   * directory[/home/userjun6] action create[2019-06-06T05:19:24+00:00] INFO: Processing directory[/home/userjun6] action create (user::default line 12)
+10.1.1.34 [2019-06-06T05:19:24+00:00] INFO: directory[/home/userjun6] created directory /home/userjun6
+10.1.1.34
+10.1.1.34     - create new directory /home/userjun6[2019-06-06T05:19:24+00:00] INFO: directory[/home/userjun6] owner changed to 1013
+10.1.1.34 [2019-06-06T05:19:24+00:00] INFO: directory[/home/userjun6] group changed to 1013
+10.1.1.34 [2019-06-06T05:19:24+00:00] INFO: directory[/home/userjun6] mode changed to 755
+10.1.1.34
+10.1.1.34     - change mode from '' to '0755'
+10.1.1.34     - change owner from '' to 'userjun6'
+10.1.1.34     - change group from '' to 'userjun6'
+10.1.1.34 [2019-06-06T05:19:24+00:00] INFO: Chef Run complete in 2.921546931 seconds
+10.1.1.34
+10.1.1.34 Running handlers:
+10.1.1.34 [2019-06-06T05:19:24+00:00] INFO: Running report handlers
+10.1.1.34 Running handlers complete
+10.1.1.34 [2019-06-06T05:19:24+00:00] INFO: Report handlers complete
+10.1.1.34 Chef Client finished, 3/6 resources updated in 09 seconds
+/home/vagrant/jun3> cat roles/webserver.json
+{
+  "name": "webserver",
+  "json_class": "Chef::Role",
+  "chef_type": "role",
+  "run_list": [
+                "recipe[apache2]",
+                "recipe[user]"
+              ]
+}
+/home/vagrant/jun3>
