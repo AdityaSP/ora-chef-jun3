@@ -1,0 +1,22 @@
+step3
+Create admin user on chef-server
+
+sudo chef-server-ctl user-create admin999 John Doe sp.aditya+5@gmail.com admin999 --filename ./admin999.pem
+
+step4
+Create organization
+
+sudo chef-server-ctl org-create jun7org jun7company --association_user admin999 --filename ./secondorg.pem
+
+
+now we can start to link workstation with server
+step5
+collect admin999.pem and place it in .chef folder on workstation
+
+step6
+create knife.rb and place it in .chef folder
+provide right admin pem and right org shortname created in step3 and step4
+
+step7
+knife ssl fetch
+knife ssl check
