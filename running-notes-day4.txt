@@ -387,3 +387,251 @@ drwxrwxr-x 2 vagrant vagrant 4096 Jun  7 06:35 .
 /home/vagrant/jun3> #knife node run_list add node1-ubuntu 'role[app]'
 /home/vagrant/jun3> #knife role from file app.json
 /home/vagrant/jun3> knife ssh 10.1.1.34 'sudo chef-client -E dev' --manual-list --ssh-user vagrant
+
+
+
+----------------------------------------------------------------------------------------------
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb
+
+Target:  local://
+
+
+  System Package
+     ✔  apache2 should be installed
+
+Test Summary: 1 successful, 0 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> cat test1.rb
+describe package('apache2') do
+  it { should be_installed }
+end
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb -t
+Cannot determine backend from target configuration "target". Valid example: ssh://192.168.0.1.
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb -t ssh://vagrant:vagrant@10.1.1.34
+
+Target:  ssh://vagrant@10.1.1.34:22
+
+
+  System Package
+     ✔  apache2 should be installed
+
+Test Summary: 1 successful, 0 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> vi test1.rb
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb -t ssh://vagrant:vagrant@10.1.1.34
+
+Target:  ssh://vagrant@10.1.1.34:22
+
+
+  System Package
+     ✔  apache2 should be installed
+  System Package
+     ✔  tomcat7 should be installed
+
+Test Summary: 2 successful, 0 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> vi test1.rb
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb
+
+Target:  local://
+
+
+  System Package
+     ✔  apache2 should be installed
+  System Package
+     ✔  tomcat7 should be installed
+  Service apache2
+     ✔  should be installed
+     ✔  should be enabled
+     ✔  should be running
+
+Test Summary: 5 successful, 0 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> vi test1.rb
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb
+
+Target:  local://
+
+
+  System Package
+     ✔  apache2 should be installed
+  System Package
+     ✔  tomcat7 should be installed
+  Service apache2
+     ✔  should be installed
+     ✔  should be enabled
+     ✔  should be running
+  Service tomcat7
+     ✔  should be installed
+     ✔  should be enabled
+     ✖  should be running
+     expected that `Service tomcat7` is running
+
+Test Summary: 7 successful, 1 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> sudo service tomcat7 status
+ * Tomcat servlet engine is running with pid 1177
+/home/vagrant/jun3/inspec_tests> vi test1.rb
+/home/vagrant/jun3/inspec_tests> sudo service tomcat7 status
+ * Tomcat servlet engine is running with pid 1177
+/home/vagrant/jun3/inspec_tests> inspect --help
+The program 'inspect' can be found in the following packages:
+ * libboost1.46-dev
+ * libboost1.48-dev
+Try: sudo apt-get install <selected package>
+/home/vagrant/jun3/inspec_tests> inspec exec --help
+Could not fetch inspec profile in "--help".
+/home/vagrant/jun3/inspec_tests> inspec exec -h
+Could not fetch inspec profile in "-h".
+/home/vagrant/jun3/inspec_tests> inspec exec
+
+Test Summary: 0 successful, 0 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> inspec sdfas
+Could not find command "sdfas".
+/home/vagrant/jun3/inspec_tests> inspec -h
+Commands:
+  inspec archive PATH                # archive a profile to tar.gz (default) or zip
+  inspec artifact SUBCOMMAND ...     # Sign, verify and install artifacts
+  inspec check PATH                  # verify all tests at the specified PATH
+  inspec compliance SUBCOMMAND ...   # Chef Compliance commands
+  inspec detect                      # detect the target OS
+  inspec env                         # Output shell-appropriate completion configuration
+  inspec exec PATHS                  # run all test files at the specified PATH.
+  inspec help [COMMAND]              # Describe available commands or one specific command
+  inspec init TEMPLATE ...           # Scaffolds a new project
+  inspec json PATH                   # read all tests in PATH and generate a JSON summary
+  inspec shell                       # open an interactive debugging shell
+  inspec supermarket SUBCOMMAND ...  # Supermarket commands
+  inspec vendor                      # Download all dependencies and generate a lockfile
+  inspec version                     # prints the version of this tool
+
+Options:
+  l, [--log-level=LOG_LEVEL]         # Set the log level: info (default), debug, warn, error
+      [--log-location=LOG_LOCATION]  # Location to send diagnostic log messages to. (default: STDOUT or STDERR)
+      [--diagnose], [--no-diagnose]  # Show diagnostics (versions, configurations)
+
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb
+
+Target:  local://
+
+
+  System Package
+     ✔  apache2 should be installed
+  System Package
+     ✔  tomcat7 should be installed
+  Service apache2
+     ✔  should be installed
+     ✔  should be enabled
+     ✔  should be running
+  Service tomcat7
+     ✔  should be installed
+     ✔  should be enabled
+     ✖  should be running
+     expected that `Service tomcat7` is running
+
+Test Summary: 7 successful, 1 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> sudo inspec exec test1.rb -t ssh://vagrant:vagrant@10.1.1.43
+I, [2019-06-07T09:24:20.938527 #8782]  INFO -- : [SSH] connection failed, retrying in 1 seconds (#<Errno::EHOSTUNREACH: No route to host - connect(2) for 10.1.1.43:22>)
+I, [2019-06-07T09:24:23.938850 #8782]  INFO -- : [SSH] connection failed, retrying in 1 seconds (#<Errno::EHOSTUNREACH: No route to host - connect(2) for 10.1.1.43:22>)
+^C/opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:204:in `sleep': Interrupt
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:204:in `rescue in establish_connection'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:187:in `establish_connection'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:215:in `session'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:79:in `run_command'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/extras/os_detect_darwin.rb:17:in `detect_darwin'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/extras/os_common.rb:125:in `detect_family_type'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/extras/os_common.rb:89:in `detect_family'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/extras/os_common.rb:31:in `initialize'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:233:in `initialize'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:58:in `new'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:58:in `os'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/extras/command_wrapper.rb:165:in `load'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh_connection.rb:45:in `initialize'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh.rb:155:in `new'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh.rb:155:in `create_new_connection'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/train-0.21.1/lib/train/transports/ssh.rb:75:in `connection'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/lib/inspec/backend.rb:23:in `create'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/lib/inspec/runner.rb:64:in `configure_transport'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/lib/inspec/runner.rb:56:in `initialize'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/lib/inspec/base_cli.rb:82:in `new'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/lib/inspec/base_cli.rb:82:in `run_tests'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/lib/inspec/cli.rb:164:in `exec'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+        from /opt/chefdk/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/bin/inspec:12:in `<top (required)>'
+        from /usr/bin/inspec:50:in `load'
+        from /usr/bin/inspec:50:in `<main>'
+/home/vagrant/jun3/inspec_tests> sudo inspec exec test1.rb -t ssh://vagrant:vagrant@10.1.1.34
+
+Target:  ssh://vagrant@10.1.1.34:22
+
+
+  System Package
+     ✔  apache2 should be installed
+  System Package
+     ✔  tomcat7 should be installed
+  Service apache2
+     ✔  should be installed
+     ✔  should be enabled
+     ✔  should be running
+  Service tomcat7
+     ✔  should be installed
+     ✔  should be enabled
+     ✖  should be running
+     expected that `Service tomcat7` is running
+
+Test Summary: 7 successful, 1 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> vi test1.rb
+/home/vagrant/jun3/inspec_tests> grep Listen /etc/apache2/httpd.conf
+/home/vagrant/jun3/inspec_tests> grep Listen /etc/apache2/ports.conf.conf
+grep: /etc/apache2/ports.conf.conf: No such file or directory
+/home/vagrant/jun3/inspec_tests> grep Listen /etc/apache2/ports.conf
+Listen 9998
+        Listen 443
+        Listen 443
+/home/vagrant/jun3/inspec_tests> vi test1.rb
+/home/vagrant/jun3/inspec_tests> inspec exec test1.rb
+Could not parse 127.0.0.1:8005, bad URI(is not URI?): addr://[127.0.0.1]:8005
+
+Target:  local://
+
+
+  System Package
+     ✔  apache2 should be installed
+  System Package
+     ✔  tomcat7 should be installed
+  Service apache2
+     ✔  should be installed
+     ✔  should be enabled
+     ✔  should be running
+  Service tomcat7
+     ✔  should be installed
+     ✔  should be enabled
+     ✖  should be running
+     expected that `Service tomcat7` is running
+  Port 9998
+     ✔  should be listening
+
+Test Summary: 8 successful, 1 failures, 0 skipped
+/home/vagrant/jun3/inspec_tests> inspec --version
+Could not find command "__version".
+/home/vagrant/jun3/inspec_tests> inspec version
+1.4.1
+/home/vagrant/jun3/inspec_tests> cat test1.rb
+describe package('apache2') do
+  it { should be_installed }
+end
+describe package('tomcat7') do
+  it { should be_installed }
+end
+describe service('apache2') do
+  it { should be_installed }
+  it { should be_enabled }
+  it { should be_running }
+end
+describe service('tomcat7') do
+  it { should be_installed }
+  it { should be_enabled }
+  it { should be_running }
+end
+describe port(9998) do
+  it { should be_listening }
+end
+/home/vagrant/jun3/inspec_tests>
