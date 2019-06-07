@@ -386,4 +386,4 @@ drwxrwxr-x 2 vagrant vagrant 4096 Jun  7 06:35 .
 }
 /home/vagrant/jun3> #knife node run_list add node1-ubuntu 'role[app]'
 /home/vagrant/jun3> #knife role from file app.json
-/home/vagrant/jun3>
+/home/vagrant/jun3> knife ssh 10.1.1.34 'sudo chef-client -E dev' --manual-list --ssh-user vagrant
