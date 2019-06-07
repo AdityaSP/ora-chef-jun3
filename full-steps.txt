@@ -1,3 +1,19 @@
+step1
+
+3 machines
+workstation
+server
+node
+
+step2
+
+workstation : chefdk
+https://docs.chef.io/install_dk.html
+
+server :
+https://docs.chef.io/install_server.html
+sudo chef-server-ctl reconfigure
+
 step3
 Create admin user on chef-server
 
@@ -20,3 +36,68 @@ provide right admin pem and right org shortname created in step3 and step4
 step7
 knife ssl fetch
 knife ssl check
+
+# connectivity with server and workstation is now complete
+
+# now start authoring cookbook
+step8
+mkdir cookbooks
+cd cookbooks
+
+step9
+chef generate cookbook mycookbook
+
+# after authoring , we are ready to upload to the server
+step10
+knife cookbook upload mycookbook
+knife cookbook list
+knife cookbook show mycookbook
+
+# create role
+step11
+    Way 1
+    1. first create vi web.json
+    2. knife role from file web.json
+
+    Way 2
+    #both create web.json and also upload to server
+    1. knife role create web --editor vi
+
+    Way 3
+    # will only create web1.json locally
+    1. knife role create web1 --local-mode --editor vi
+    2. knife role from file web1.json
+
+knife role list
+knife role show web
+
+step12
+
+# create environment
+    Way 1
+    1. first create vi dev.json
+    2. knife environment  from file dev.json
+
+    Way 2
+    #both create dev.json and also upload to server
+    1. knife environment create dev --editor vi
+
+    Way 3
+    # will only create dev.json locally
+    1. knife environment  create dev --local-mode --editor vi
+    2. knife environment  from file dev.json
+
+knife environment list
+knife environment show dev
+
+
+step13
+bootstrap activity
+knife bootstrap 10.1.1.34 –-ssh-user vagrant –-sudo –-identity-file /vagrant/vagrant_private_key –-node-name node1-ubuntu
+
+Step 14
+knife node run_list set node1-ubuntu 'role[web]'
+
+step 15
+chef-client runs
+knife ssh 10.1.1.34 'sudo chef-client -E dev' --manuallist --node-name node1-ubuntu
