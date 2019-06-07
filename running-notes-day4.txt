@@ -1,0 +1,318 @@
+/home/vagrant/jun3> git clone https://github.com/AdityaSP/MyAppDemo
+Cloning into 'MyAppDemo'...
+remote: Enumerating objects: 197, done.
+remote: Total 197 (delta 0), reused 0 (delta 0), pack-reused 197
+Receiving objects: 100% (197/197), 29.36 KiB, done.
+Resolving deltas: 100% (75/75), done.
+/home/vagrant/jun3> ls
+apache.rb  encrypted_data_bag_secret  MyAppDemo             roles
+cookbooks  environments               node1-ubuntu-key.pem  stop.rb
+data_bags  helloworld.rb              nodes
+/home/vagrant/jun3> cd MyAppDemo/
+/home/vagrant/jun3/MyAppDemo> ls
+ansible.cfg     deployment.yml         hosts            pom.xml
+cipipeline.txt  devopsdemo-recipe.txt  java-tomcat.yml  src
+dbrelease       Dockerfile             Jenkinsfile
+/home/vagrant/jun3/MyAppDemo> mvn --version
+Apache Maven 3.0.4
+Maven home: /usr/share/maven
+Java version: 1.7.0_80, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-7-oracle/jre
+Default locale: en_US, platform encoding: ISO-8859-1
+OS name: "linux", version: "3.2.0-23-generic", arch: "amd64", family: "unix"
+/home/vagrant/jun3/MyAppDemo> java -version
+java version "1.7.0_80"
+Java(TM) SE Runtime Environment (build 1.7.0_80-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)
+/home/vagrant/jun3/MyAppDemo> mvn install
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building MyAppDemo Maven Webapp 1.0.0
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.3:resources (default-resources) @ MyAppDemo ---
+[WARNING] Using platform encoding (ISO-8859-1 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/vagrant/jun3/MyAppDemo/src/main/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ MyAppDemo ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- maven-resources-plugin:2.3:testResources (default-testResources) @ MyAppDemo ---
+[WARNING] Using platform encoding (ISO-8859-1 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/vagrant/jun3/MyAppDemo/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ MyAppDemo ---
+[WARNING] File encoding has not been set, using platform encoding ISO-8859-1, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to /home/vagrant/jun3/MyAppDemo/target/test-classes
+[INFO]
+[INFO] --- maven-surefire-plugin:2.10:test (default-test) @ MyAppDemo ---
+[INFO] Surefire report directory: /home/vagrant/jun3/MyAppDemo/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.devopsdemo.testcases.SeriousTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.058 sec
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO]
+[INFO] --- maven-war-plugin:2.1.1:war (default-war) @ MyAppDemo ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [MyAppDemo] in [/home/vagrant/jun3/MyAppDemo/target/MyAppDemo]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/home/vagrant/jun3/MyAppDemo/src/main/webapp]
+[INFO] Webapp assembled in [157 msecs]
+[INFO] Building war: /home/vagrant/jun3/MyAppDemo/target/MyAppDemo.war
+[INFO] WEB-INF/web.xml already added, skipping
+[INFO]
+[INFO] --- maven-install-plugin:2.3:install (default-install) @ MyAppDemo ---
+[INFO] Installing /home/vagrant/jun3/MyAppDemo/target/MyAppDemo.war to /home/vagrant/.m2/repository/com/devops/demo/MyAppDemo/1.0.0/MyAppDemo-1.0.0.war
+[INFO] Installing /home/vagrant/jun3/MyAppDemo/pom.xml to /home/vagrant/.m2/repository/com/devops/demo/MyAppDemo/1.0.0/MyAppDemo-1.0.0.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 8.523s
+[INFO] Finished at: Fri Jun 07 04:43:43 UTC 2019
+[INFO] Final Memory: 10M/24M
+[INFO] ------------------------------------------------------------------------
+/home/vagrant/jun3/MyAppDemo> ls
+ansible.cfg     deployment.yml         hosts            pom.xml
+cipipeline.txt  devopsdemo-recipe.txt  java-tomcat.yml  src
+dbrelease       Dockerfile             Jenkinsfile      target
+/home/vagrant/jun3/MyAppDemo> cd target
+/home/vagrant/jun3/MyAppDemo/target> ls
+generated-sources  MyAppDemo      surefire          test-classes
+maven-archiver     MyAppDemo.war  surefire-reports
+/home/vagrant/jun3/MyAppDemo/target> cd ..
+/home/vagrant/jun3/MyAppDemo> ls
+ansible.cfg     deployment.yml         hosts            pom.xml
+cipipeline.txt  devopsdemo-recipe.txt  java-tomcat.yml  src
+dbrelease       Dockerfile             Jenkinsfile      target
+/home/vagrant/jun3/MyAppDemo> ls -ltr dbrelease/
+total 4
+-rwxrwxr-x 1 vagrant vagrant 425 Jun  7 04:41 databaserelease.sql
+/home/vagrant/jun3/MyAppDemo> mysql -uroot -proot < dbrelease/databaserelease.sql
+/home/vagrant/jun3/MyAppDemo> mysql -uroot -proot
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 43
+Server version: 5.5.53-0ubuntu0.12.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| devopsdemodb       |
+| mysql              |
+| performance_schema |
++--------------------+
+4 rows in set (0.05 sec)
+
+mysql> drop database devopsdemo
+    -> ;
+ERROR 1008 (HY000): Can't drop database 'devopsdemo'; database doesn't exist
+mysql> drop database devopsdemodb;
+Query OK, 1 row affected (0.12 sec)
+
+mysql> exit
+Bye
+/home/vagrant/jun3/MyAppDemo> mysql -uroot -proot < dbrelease/databaserelease.sql
+/home/vagrant/jun3/MyAppDemo> mysql -uroot -proot
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 45
+Server version: 5.5.53-0ubuntu0.12.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| devopsdemodb       |
+| mysql              |
+| performance_schema |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> use devopsdemodb;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++------------------------+
+| Tables_in_devopsdemodb |
++------------------------+
+| user                   |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> exit
+Bye
+/home/vagrant/jun3/MyAppDemo> cat dbrelease/databaserelease.sql
+CREATE DATABASE IF NOT EXISTS devopsdemodb;
+use devopsdemodb;
+
+
+CREATE TABLE IF NOT EXISTS `user` (
+ `id` int(10) unsigned NOT NULL auto_increment,
+ `first_name` varchar(45) NOT NULL,
+ `last_name` varchar(45) NOT NULL,
+ `email` varchar(45) NOT NULL,
+ `username` varchar(45) NOT NULL,
+ `password` varchar(45) NOT NULL,
+ `regdate` date NOT NULL, PRIMARY KEY (`id`) )
+ ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/home/vagrant/jun3/MyAppDemo> cd /var/lib/
+AccountsService/    logrotate/          tomcat7/
+apt/                misc/               ucf/
+aptitude/           mlocate/            update-manager/
+apt-xapian-index/   mysql/              update-notifier/
+belocs/             mysql-files/        update-rc.d/
+dbus/               nfs/                urandom/
+dhcp/               ntp/                ureadahead/
+dpkg/               ntpdate/            usbutils/
+initramfs-tools/    os-prober/          VBoxGuestAdditions/
+initscripts/        pam/                vim/
+insserv/            plymouth/           xfonts/
+jenkins/            security/           xml-core/
+libuuid/            sgml-base/
+locales/            sudo/
+/home/vagrant/jun3/MyAppDemo> cd /var/lib/tomcat7/
+common/  conf/    logs/    server/  shared/  webapps/ work/
+/home/vagrant/jun3/MyAppDemo> cd /var/lib/tomcat7/webapps/
+/var/lib/tomcat7/webapps> ls
+MyAppDemo  MyAppDemo.war  ROOT
+/var/lib/tomcat7/webapps> sudo cp ~/jun3/MyAppDemo/target/MyAppDemo.war .
+/var/lib/tomcat7/webapps> ls
+MyAppDemo  MyAppDemo.war  ROOT
+/var/lib/tomcat7/webapps> ls -ltra
+total 1008
+drwxr-xr-x 6 root    root       4096 Dec  6  2016 ..
+drwxr-xr-x 3 root    root       4096 Dec  6  2016 ROOT
+drwxrwxrwx 4 tomcat7 tomcat7    4096 Nov 23  2018 .
+drwxr-xr-x 4 tomcat7 tomcat7    4096 Nov 23  2018 MyAppDemo
+-rwxrwxrwx 1 jenkins jenkins 1012648 Jun  7 04:48 MyAppDemo.war
+/var/lib/tomcat7/webapps> sudo service tomcat7 status
+ * Tomcat servlet engine is running with pid 1177
+/var/lib/tomcat7/webapps> ls -ltra
+total 1008
+drwxr-xr-x 6 root    root       4096 Dec  6  2016 ..
+drwxr-xr-x 3 root    root       4096 Dec  6  2016 ROOT
+-rwxrwxrwx 1 jenkins jenkins 1012648 Jun  7 04:48 MyAppDemo.war
+drwxrwxrwx 4 tomcat7 tomcat7    4096 Jun  7 04:48 .
+drwxr-xr-x 4 tomcat7 tomcat7    4096 Jun  7 04:48 MyAppDemo
+/var/lib/tomcat7/webapps> cd -
+/home/vagrant/jun3/MyAppDemo
+/home/vagrant/jun3/MyAppDemo> mvn install
+[INFO] Scanning for projects...
+^C/home/vagrant/jun3/MyAppDemo> git pull
+remote: Enumerating objects: 6, done.
+remote: Counting objects: 100% (6/6), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 6 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (6/6), done.
+From https://github.com/AdityaSP/MyAppDemo
+   4ab4e0d..8d62977  master     -> origin/master
+Updating 4ab4e0d..8d62977
+Fast-forward
+ src/main/webapp/index.jsp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/vagrant/jun3/MyAppDemo> mvn install
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building MyAppDemo Maven Webapp 1.0.0
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.3:resources (default-resources) @ MyAppDemo ---
+[WARNING] Using platform encoding (ISO-8859-1 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/vagrant/jun3/MyAppDemo/src/main/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ MyAppDemo ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- maven-resources-plugin:2.3:testResources (default-testResources) @ MyAppDemo ---
+[WARNING] Using platform encoding (ISO-8859-1 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/vagrant/jun3/MyAppDemo/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ MyAppDemo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- maven-surefire-plugin:2.10:test (default-test) @ MyAppDemo ---
+[INFO] Surefire report directory: /home/vagrant/jun3/MyAppDemo/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.devopsdemo.testcases.SeriousTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 sec
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO]
+[INFO] --- maven-war-plugin:2.1.1:war (default-war) @ MyAppDemo ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [MyAppDemo] in [/home/vagrant/jun3/MyAppDemo/target/MyAppDemo]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/home/vagrant/jun3/MyAppDemo/src/main/webapp]
+[INFO] Webapp assembled in [160 msecs]
+[INFO] Building war: /home/vagrant/jun3/MyAppDemo/target/MyAppDemo.war
+[INFO] WEB-INF/web.xml already added, skipping
+[INFO]
+[INFO] --- maven-install-plugin:2.3:install (default-install) @ MyAppDemo ---
+[INFO] Installing /home/vagrant/jun3/MyAppDemo/target/MyAppDemo.war to /home/vagrant/.m2/repository/com/devops/demo/MyAppDemo/1.0.0/MyAppDemo-1.0.0.war
+[INFO] Installing /home/vagrant/jun3/MyAppDemo/pom.xml to /home/vagrant/.m2/repository/com/devops/demo/MyAppDemo/1.0.0/MyAppDemo-1.0.0.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 5.908s
+[INFO] Finished at: Fri Jun 07 04:51:09 UTC 2019
+[INFO] Final Memory: 7M/17M
+[INFO] ------------------------------------------------------------------------
+/home/vagrant/jun3/MyAppDemo> cd -
+/var/lib/tomcat7/webapps
+/var/lib/tomcat7/webapps> sudo cp ~/jun3/MyAppDemo/target/MyAppDemo.war .
+/var/lib/tomcat7/webapps> ls -ltra
+total 1008
+drwxr-xr-x 6 root    root       4096 Dec  6  2016 ..
+drwxr-xr-x 3 root    root       4096 Dec  6  2016 ROOT
+drwxrwxrwx 4 tomcat7 tomcat7    4096 Jun  7 04:48 .
+drwxr-xr-x 4 tomcat7 tomcat7    4096 Jun  7 04:48 MyAppDemo
+-rwxrwxrwx 1 jenkins jenkins 1012646 Jun  7 04:51 MyAppDemo.war
+/var/lib/tomcat7/webapps> ls -ltra
+total 1008
+drwxr-xr-x 6 root    root       4096 Dec  6  2016 ..
+drwxr-xr-x 3 root    root       4096 Dec  6  2016 ROOT
+drwxrwxrwx 4 tomcat7 tomcat7    4096 Jun  7 04:48 .
+drwxr-xr-x 4 tomcat7 tomcat7    4096 Jun  7 04:48 MyAppDemo
+-rwxrwxrwx 1 jenkins jenkins 1012646 Jun  7 04:51 MyAppDemo.war
+/var/lib/tomcat7/webapps> ls -ltra
+total 1008
+drwxr-xr-x 6 root    root       4096 Dec  6  2016 ..
+drwxr-xr-x 3 root    root       4096 Dec  6  2016 ROOT
+-rwxrwxrwx 1 jenkins jenkins 1012646 Jun  7 04:51 MyAppDemo.war
+drwxrwxrwx 4 tomcat7 tomcat7    4096 Jun  7 04:51 .
+drwxr-xr-x 4 tomcat7 tomcat7    4096 Jun  7 04:51 MyAppDemo
+/var/lib/tomcat7/webapps>
