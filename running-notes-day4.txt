@@ -316,3 +316,74 @@ drwxr-xr-x 3 root    root       4096 Dec  6  2016 ROOT
 drwxrwxrwx 4 tomcat7 tomcat7    4096 Jun  7 04:51 .
 drwxr-xr-x 4 tomcat7 tomcat7    4096 Jun  7 04:51 MyAppDemo
 /var/lib/tomcat7/webapps>
+
+
+
+-------------------------------------------------------------------------------------
+
+/home/vagrant/jun3> #chef generate cookbook app_deploy
+/home/vagrant/jun3> cat cookbooks/app_deploy/recipes/default.rb
+
+service 'tomcat7' do
+  action :start
+end
+
+cookbook_file '/var/lib/tomcat7/webapps/MyAppDemo.war' do
+  source "MyAppDemo.war"
+end
+/home/vagrant/jun3> #cp /var/lib/jenkins/workspace/jun3/target/MyAppDemo.war app_deploy/files/         /home/vagrant/jun3> ls -ltra app_deploy/files/
+ls: cannot access app_deploy/files/: No such file or directory
+/home/vagrant/jun3> i#ls -ltra app_deploy/files/
+No command 'i#ls' found, did you mean:
+ Command 'i-ls' from package 'integrit' (universe)
+ Command 'ils' from package 'sleuthkit' (universe)
+ Command 'imls' from package 'im' (universe)
+i#ls: command not found
+/home/vagrant/jun3> #chef generate cookbook app_deploy
+/home/vagrant/jun3> cat cookbooks/app_deploy/recipes/default.rb
+
+service 'tomcat7' do
+  action :start
+end
+
+cookbook_file '/var/lib/tomcat7/webapps/MyAppDemo.war' do
+  source "MyAppDemo.war"
+end
+/home/vagrant/jun3> #cp /var/lib/jenkins/workspace/jun3/target/MyAppDemo.war cookbooks/app_deploy/files/
+/home/vagrant/jun3> ls -ltra cookbooks/app_deploy/files/
+total 1000
+drwxrwxr-x 8 vagrant vagrant    4096 Jun  7 06:28 ..
+drwxrwxr-x 2 vagrant vagrant    4096 Jun  7 06:28 .
+-rw-r--r-- 1 vagrant vagrant 1012648 Jun  7 06:28 MyAppDemo.war
+/home/vagrant/jun3> #chef generate cookbook db_deploy
+/home/vagrant/jun3> cat cookbooks/db_deploy/recipes/default.rb
+
+cookbook_file '/tmp/databaserelease.sql' do
+  source "databaserelease.sql"
+end
+
+bash 'compile db' do
+  code <<-EOH
+    mysql -uroot -proot < /tmp/databaserelease.sql
+  EOH
+end
+/home/vagrant/jun3> #cp /var/lib/jenkins/workspace/jun3/dbrelease/databaserelease.sql cookbooks/db_deploy/files/
+/home/vagrant/jun3> ls -ltra cookbooks/db_deploy/files/
+total 12
+drwxrwxr-x 8 vagrant vagrant 4096 Jun  7 06:34 ..
+-rwxr-xr-x 1 vagrant vagrant  425 Jun  7 06:35 databaserelease.sql
+drwxrwxr-x 2 vagrant vagrant 4096 Jun  7 06:35 .
+/home/vagrant/jun3> #knife cookbook upload db_deploy                                                   /home/vagrant/jun3> #knife cookbook upload app_deploy
+/home/vagrant/jun3> cat roles/app.json
+{
+  "name": "app",
+  "json_class": "Chef::Role",
+  "chef_type": "role",
+  "run_list": [
+                "recipe[app_deploy]",
+                "recipe[db_deploy]"
+              ]
+}
+/home/vagrant/jun3> #knife node run_list add node1-ubuntu 'role[app]'
+/home/vagrant/jun3> #knife role from file app.json
+/home/vagrant/jun3>
